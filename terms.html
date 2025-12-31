@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>  <html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>Terms and Conditions | UNSAID</title>  
+    <style>  
+        /* --- DARK MODE VARIABLES --- */  
+        :root {  
+            --bg-color: #000000;       /* Pure Black */  
+            --card-bg: #111111;        /* Slightly lighter for footer */  
+            --text-main: #e0e0e0;      /* Off-white for reading */  
+            --text-dim: #a0a0a0;       /* Grey for secondary text */  
+            --accent-color: #ffffff;   /* Bright white for headers */  
+            --link-color: #64b5f6;     /* Light Blue for links */  
+            --border-color: #333333;   /* Dark grey borders */  
+            --font-title: 'Courier New', Courier, monospace; /* The "UNSAID" font */  
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;  
+        }  * {  
+        box-sizing: border-box;  
+        margin: 0;  
+        padding: 0;  
+    }  
+
+    body {  
+        font-family: var(--font-body);  
+        line-height: 1.7;  
+        color: var(--text-main);  
+        background-color: var(--bg-color);  
+        display: flex;  
+        flex-direction: column;  
+        min-height: 100vh;  
+    }  
+
+    /* --- HEADER SECTION --- */  
+    header {  
+        background-color: var(--bg-color);  
+        padding: 60px 20px 40px;  
+        text-align: center;  
+        border-bottom: 1px solid var(--border-color);  
+    }  
+
+    /* The Main UNSAID Logo Title */  
+    .brand-title {  
+        font-family: var(--font-title);  
+        font-size: 3.5rem;  
+        font-weight: 700;  
+        letter-spacing: 5px;  
+        color: var(--accent-color);  
+        margin-bottom: 10px;  
+        text-transform: uppercase;  
+    }  
+
+    /* The Page Title (Terms & Conditions) */  
+    .page-title {  
+        font-family: var(--font-title);  
+        font-size: 1.2rem;  
+        color: var(--text-dim);  
+        text-transform: uppercase;  
+        letter-spacing: 2px;  
+        margin-bottom: 15px;  
+    }  
+
+    .effective-date {  
+        font-size: 0.9rem;  
+        color: var(--text-dim);  
+        font-style: italic;  
+    }  
+
+    /* --- CONTENT CONTAINER --- */  
+    .legal-container {  
+        max-width: 800px;  
+        margin: 0 auto;  
+        padding: 60px 20px;  
+        flex: 1;  
+    }  
+
+    /* --- TYPOGRAPHY --- */  
+    section {  
+        margin-bottom: 40px;  
+        border-bottom: 1px solid var(--border-color);  
+        padding-bottom: 30px;  
+    }  
+
+    section:last-of-type {  
+        border-bottom: none;  
+    }  
+
+    h2 {  
+        font-family: var(--font-title); /* Keeping headers in the theme font */  
+        font-size: 1.4rem;  
+        margin-bottom: 20px;  
+        color: var(--accent-color);  
+        text-transform: uppercase;  
+        letter-spacing: 1px;  
+        border-left: 4px solid var(--accent-color);  
+        padding-left: 15px;  
+    }  
+
+    h3 {  
+        font-size: 1.1rem;  
+        margin-top: 20px;  
+        margin-bottom: 10px;  
+        color: #fff;  
+        font-weight: 700;  
+    }  
+
+    p {  
+        margin-bottom: 15px;  
+        font-size: 1rem;  
+        color: var(--text-main);  
+    }  
+
+    ul, ol {  
+        margin-bottom: 20px;  
+        padding-left: 25px;  
+    }  
+
+    li {  
+        margin-bottom: 10px;  
+        color: var(--text-main);  
+    }  
+
+    strong {  
+        color: #fff;  
+        font-weight: 600;  
+    }  
+
+    /* --- LINK STYLES --- */  
+    a {  
+        color: var(--link-color);  
+        text-decoration: none;  
+        transition: color 0.2s;  
+    }  
+      
+    a:hover {  
+        color: #fff;  
+        text-decoration: underline;  
+    }  
+
+    /* --- FOOTER STYLES (DARK MODE) --- */  
+    .site-footer {  
+        background-color: var(--card-bg);  
+        border-top: 1px solid var(--border-color);  
+        padding: 40px 20px;  
+        text-align: center;  
+        margin-top: auto;  
+    }  
+
+    .footer-content {  
+        max-width: 800px;  
+        margin: 0 auto;  
+        display: flex;  
+        flex-direction: column;  
+        align-items: center;  
+        gap: 15px;  
+    }  
+
+    .footer-links {  
+        display: flex;  
+        gap: 20px;  
+        flex-wrap: wrap;  
+        justify-content: center;  
+    }  
+
+    .footer-link {  
+        text-decoration: none;  
+        color: var(--text-dim);  
+        font-size: 0.9rem;  
+        font-weight: 500;  
+        font-family: var(--font-title);  
+    }  
+
+    .footer-link:hover {  
+        color: var(--accent-color);  
+        text-decoration: underline;  
+    }  
+
+    .developer-contact {  
+        font-size: 0.9rem;  
+        color: var(--text-dim);  
+        margin-top: 10px;  
+    }  
+
+    .email-link {  
+        color: var(--link-color);  
+        text-decoration: none;  
+        font-weight: 600;  
+    }  
+
+    .copyright {  
+        margin-top: 20px;  
+        font-size: 0.8rem;  
+        color: #555; /* Darker grey for copyright */  
+    }  
+
+    /* --- RESPONSIVE --- */  
+    @media (max-width: 600px) {  
+        .brand-title { font-size: 2.5rem; }  
+        .legal-container { padding: 30px 20px; }  
+        h2 { font-size: 1.2rem; }  
+    }  
+</style>
+
+</head>  
+<body>  <header>  
+    <div class="brand-title">UNSAID</div>  
+    <div class="page-title">Terms and Conditions</div>  
+    <div class="effective-date">Effective Date: January 1, 2026</div>  
+</header>  
+
+<div class="legal-container">  
+      
+    <section>  
+        <h2>1. Agreement to Terms</h2>  
+        <p>These Terms and Conditions constitute a legally binding agreement made between you, whether personally or on behalf of an entity (“User,” “you”) and UNSAID (“we,” “us,” or “our”), concerning your access to and use of the UNSAID application and website (the “Service”).</p>  
+        <p><strong>By accessing the Service, you agree that you have read, understood, and agreed to be bound by all of these Terms and Conditions. If you do not agree with all of these terms, then you are expressly prohibited from using the Service and you must discontinue use immediately.</strong></p>  
+    </section>  
+
+    <section>  
+        <h2>2. Description of Service</h2>  
+        <p>UNSAID provides a platform for anonymous, public, and ephemeral text-based communication. The Service is characterized by:</p>  
+        <ul>  
+            <li><strong>No Registration:</strong> Users are not required to create accounts or provide personal data.</li>  
+            <li><strong>Session-Based Identity:</strong> Identities (Aliases) are randomized and temporary.</li>  
+            <li><strong>Automatic Deletion:</strong> Messages are deleted after a user-selected duration (24h, 3 days, or 7 days).</li>  
+        </ul>  
+    </section>  
+
+    <section>  
+        <h2>3. Eligibility and Age Restrictions</h2>  
+        <p>The Service is intended for users who are at least <strong>thirteen (13) years of age</strong>. If you are under the age of 13, you are not permitted to use or access the Service. By using UNSAID, you warrant that you meet this age requirement.</p>  
+    </section>  
+
+    <section>  
+        <h2>4. User Conduct and Prohibited Activities</h2>  
+        <p>You may not access or use the Service for any purpose other than that for which we make the Service available. As a user of UNSAID, you agree <strong>NOT</strong> to:</p>  
+        <ul>  
+            <li><strong>Illegal Content:</strong> Post or transmit content that is illegal, harmful, threatening, abusive, harassing, tortious, defamatory, vulgar, obscene, or invasive of another's privacy.</li>  
+            <li><strong>Specific Harms:</strong> Post content that promotes child sexual abuse, terrorism, hate speech against protected groups, or incites violence.</li>  
+            <li><strong>Doxxing:</strong> Post private or personally identifiable information of any individual without their explicit consent.</li>  
+            <li><strong>Malicious Use:</strong> Use the Service to distribute viruses, malware, or execute "denial of service" attacks.</li>  
+            <li><strong>Impersonation:</strong> Attempt to impersonate a specific real-world individual or government official to cause harm or mislead.</li>  
+            <li><strong>Spam:</strong> Use automated scripts to flood the Service with repetitive content.</li>  
+        </ul>  
+    </section>  
+
+    <section>  
+        <h2>5. Content Ownership and License</h2>  
+        <h3>5.1 No Ownership of Identity</h3>  
+        <p>You acknowledge that you do not own your randomized "Alias." It is a temporary system identifier and provides no right to continuity or reputation.</p>  
+
+        <h3>5.2 License to Host</h3>  
+        <p>By posting content to UNSAID, you grant us a worldwide, non-exclusive, royalty-free, temporary license to host, store, and display that content on the Service until its scheduled expiration or manual removal.</p>  
+
+        <h3>5.3 Public Nature</h3>  
+        <p>You understand that all posts are <strong>Public</strong>. Do not post anything that you intend to keep private. Because the Service is anonymous, we cannot verify you as the "owner" of a message once it is sent; therefore, requests to manually delete specific messages may not be possible unless the message violates these Terms.</p>  
+    </section>  
+
+    <section>  
+        <h2>6. Intermediary Liability and Safe Harbor</h2>  
+        <h3>6.1 Passive Conduit</h3>  
+        <p>UNSAID acts as a "Passive Conduit" and an intermediary. We do not initiate the transmission, select the receiver of the transmission, or select or modify the information contained in the transmission.</p>  
+
+        <h3>6.2 Legal Shields</h3>  
+        <ul>  
+            <li><strong>India:</strong> In accordance with <strong>Section 79 of the Information Technology Act, 2000</strong>, UNSAID is exempt from liability for any third-party information or data made available by users.</li>  
+            <li><strong>United States:</strong> Under <strong>Section 230 of the Communications Decency Act</strong>, UNSAID is not treated as the publisher or speaker of user-provided content.</li>  
+        </ul>  
+    </section>  
+
+    <section>  
+        <h2>7. Moderation and Reporting</h2>  
+        <p>We reserve the right, but not the obligation, to:</p>  
+        <ol style="margin-left: 25px; margin-bottom: 20px; color: var(--text-main);">  
+            <li>Monitor or review the Service for violations of these Terms.</li>  
+            <li>Remove or disable access to any content that violates the law or these Terms upon receiving "actual knowledge" (e.g., a valid report or court order).</li>  
+            <li>Refuse service or restrict access to any user who violates these Terms.</li>  
+        </ol>  
+    </section>  
+
+    <section>  
+        <h2>8. No Warranty and Limitation of Liability</h2>  
+        <p><strong>THE SERVICE IS PROVIDED ON AN "AS-IS" AND "AS-AVAILABLE" BASIS.</strong></p>  
+        <ul>  
+            <li>We make no warranties that the Service will be uninterrupted, timely, secure, or error-free.</li>  
+            <li>We are not liable for the deletion, corruption, or failure to store any content.</li>  
+            <li><strong>In no event shall UNSAID or its developers be liable for any direct, indirect, incidental, or consequential damages arising from your use of the Service or the conduct of other users.</strong></li>  
+        </ul>  
+    </section>  
+
+    <section>  
+        <h2>9. Indemnification</h2>  
+        <p>You agree to defend, indemnify, and hold us harmless (including our developers and affiliates) from and against any loss, damage, liability, or claim, including reasonable attorneys’ fees, made by any third party due to or arising out of: (1) your contributions; (2) your use of the Service; or (3) your breach of these Terms and Conditions.</p>  
+    </section>  
+
+    <section>  
+        <h2>10. Dispute Resolution and Governing Law</h2>  
+        <p>These Terms shall be governed by and defined following the laws of <strong>India</strong> (or your specific jurisdiction). You and UNSAID irrevocably consent that the courts of your local jurisdiction shall have exclusive jurisdiction to resolve any dispute which may arise in connection with these terms.</p>  
+    </section>  
+
+    <section>  
+    <h2>11. Contact Information</h2>  
+    <p>For any grievances or reports regarding prohibited content, please contact the Grievance Officer at:</p>  
+    <p><strong>Email:</strong> <a href="mailto:bulastica1@gmail.com" class="email-link">bulastica1@gmail.com</a></p>  
+</section>  
+
+</div>  
+
+<footer class="site-footer">  
+    <div class="footer-content">  
+          
+        <div class="footer-links">  
+            <a href="privacy.html" class="footer-link">Privacy Policy</a>  
+            <a href="developer.html" class="footer-link">Developer Contact</a>  
+        </div>  
+
+        <div class="developer-contact">  
+            Questions? Email us at:   
+            <a href="mailto:bulastica1@gmail.com" class="email-link">bulastica1@gmail.com</a>  
+        </div>  
+
+        <div class="copyright">  
+            &copy; <script>document.write(new Date().getFullYear())</script> UNSAID. All rights reserved.  
+        </div>  
+
+    </div>  
+</footer>
+
+</body>  
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact & Owner | UNSAID</title>
+    <style>
+        /* --- DARK MODE VARIABLES --- */
+        :root {
+            --bg-color: #000000;       /* Pure Black */
+            --card-bg: #111111;        /* Slightly lighter for footer/cards */
+            --text-main: #e0e0e0;      /* Off-white for reading */
+            --text-dim: #a0a0a0;       /* Grey for secondary text */
+            --accent-color: #ffffff;   /* Bright white for headers */
+            --link-color: #64b5f6;     /* Light Blue for links */
+            --border-color: #333333;   /* Dark grey borders */
+            --warning-border: #d32f2f; /* Red for important notices */
+            --font-title: 'Courier New', Courier, monospace; /* UNSAID branding font */
+            --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.7;
+            color: var(--text-main);
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER SECTION --- */
+        header {
+            background-color: var(--bg-color);
+            padding: 60px 20px 40px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .brand-title {
+            font-family: var(--font-title);
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
+
+        .page-title {
+            font-family: var(--font-title);
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+
+        /* --- CONTENT CONTAINER --- */
+        .content-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            flex: 1;
+        }
+
+        /* --- SECTIONS --- */
+        section {
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 40px;
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        h2 {
+            font-family: var(--font-title);
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-left: 4px solid var(--accent-color);
+            padding-left: 15px;
+            line-height: 1.4;
+        }
+
+        h3 {
+            font-family: var(--font-body);
+            font-size: 1.2rem;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        ul {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            color: var(--text-main);
+        }
+
+        li {
+            margin-bottom: 10px;
+            padding-left: 5px;
+        }
+
+        /* --- CONTACT BOXES --- */
+        .contact-highlight {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .email-display {
+            font-family: var(--font-title);
+            font-size: 1.1rem;
+            color: var(--link-color);
+            text-decoration: none;
+            display: inline-block;
+            word-break: break-all; /* Prevents long emails from breaking mobile layout */
+        }
+
+        .note-text {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        /* --- IMPORTANT NOTICE BOX --- */
+        .important-notice {
+            border: 1px solid var(--warning-border);
+            padding: 25px;
+            background-color: rgba(211, 47, 47, 0.05);
+            border-radius: 4px;
+        }
+
+        .important-notice h2 {
+            border-left-color: var(--warning-border);
+            color: #ef9a9a;
+        }
+
+        /* --- FOOTER STYLES --- */
+        .site-footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-link {
+            text-decoration: none;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: var(--font-title);
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+
+        .developer-contact-small {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-top: 10px;
+            word-break: break-word;
+        }
+
+        .email-link-footer {
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #555;
+        }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 600px) {
+            .brand-title {
+                font-size: 2.5rem; 
+                letter-spacing: 2px;
+            }
+            .page-title {
+                font-size: 1rem;
+                letter-spacing: 1px;
+            }
+            header {
+                padding: 40px 15px 30px;
+            }
+            .content-container {
+                padding: 30px 20px;
+            }
+            h2 {
+                font-size: 1.25rem;
+                padding-left: 10px;
+                border-left-width: 3px;
+            }
+            .email-display {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-title">UNSAID</div>
+        <div class="page-title">Contact & Owner</div>
+    </header>
+
+    <div class="content-container">
+        
+        <section>
+            <h2>General Inquiries & Support</h2>
+            <p>For general questions, feedback, bug reports, feature suggestions, or simply to say hello, please contact our support desk.</p>
+            
+            <div class="contact-highlight">
+                <a href="mailto:bulastica1@gmail.com" class="email-display">
+                    bulastica1@gmail.com
+                </a>
+            </div>
+        </section>
+
+        <section>
+            <h2>Developer Contact, Business & Investment</h2>
+            <p>UNSAID is developed and maintained under the <strong>PROJECT-1 initiative</strong>.</p>
+            <p>For official communications, legal notices, infrastructure discussions, business collaborations, research partnerships, advertising models, or exploratory investment conversations, you may contact:</p>
+            
+            <div class="contact-highlight">
+                <a href="mailto:project1.innovators@gmail.com" class="email-display">
+                    project1.innovators@gmail.com
+                </a>
+            </div>
+
+            <div class="note-text">
+                <p><strong>Please note:</strong> This contact channel is intended for professional, technical, legal, business, and strategic inquiries only.</p>
+                <p>Messages may be reviewed for relevance, security, and operational feasibility. Contacting this address does not create any obligation, partnership, fiduciary relationship, or commitment.</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>About the Creator & the Project</h2>
+            
+            <h3>About the Developer (Anonymous by Design)</h3>
+            <p>UNSAID is created by an anonymous independent developer with an engineering background and a long-standing interest in communication systems, privacy architecture, and human expression in digital environments.</p>
+            <p>The project is intentionally built outside conventional social, commercial, and surveillance-driven models. UNSAID does not prioritize growth metrics, user acquisition, or behavioral optimization. Instead, it explores a fundamental question:</p>
+            <p style="border-left: 2px solid #555; padding-left: 15px; margin-left: 5px; font-style: italic;">"What remains of expression when identity, ownership, and permanence are removed?"</p>
+            
+            <p>The developer remains anonymous by design to:</p>
+            <ul>
+                <li>Prevent authority or personality from shaping participation</li>
+                <li>Keep the platform idea-centric rather than founder-centric</li>
+                <li>Maintain neutrality, restraint, and architectural integrity</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Business, Investment & Collaboration</h2>
+            
+            <h3>Open to Collaboration, Investment & Ethical Commercial Models</h3>
+            <p>While UNSAID is currently operated as an experimental platform, the project is open to thoughtful, aligned engagement, including:</p>
+            <ul>
+                <li>Exploratory investment discussions (early-stage, long-term, value-aligned)</li>
+                <li>Research or academic collaborations related to privacy, communication, or systems design</li>
+                <li>Infrastructure or technology partnerships</li>
+                <li>Ethical advertising or sponsorship models that do not rely on user tracking, profiling, or data exploitation</li>
+                <li>Independent audits, grants, or institutional support aligned with privacy-first principles</li>
+            </ul>
+
+            <p>Any potential monetization or commercial integration will:</p>
+            <ul>
+                <li>Respect UNSAID’s anonymity-first architecture</li>
+                <li>Avoid invasive data collection or behavioral tracking</li>
+                <li>Prioritize user safety, legal compliance, and system integrity</li>
+            </ul>
+            <p>UNSAID does not guarantee commercialization, revenue models, or investor returns. All discussions remain discretionary, exploratory, and subject to formal legal agreements.</p>
+        </section>
+
+        <section class="important-notice">
+            <h2>Important Notice</h2>
+            <p>UNSAID does not:</p>
+            <ul>
+                <li>Solicit investments from the public</li>
+                <li>Offer securities or financial instruments</li>
+                <li>Make forward-looking promises or guarantees</li>
+            </ul>
+            <p>Nothing on this platform constitutes an offer, solicitation, or commitment under applicable securities or contract laws.</p>
+        </section>
+
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            
+            <div class="footer-links">
+                <a href="privacy.html" class="footer-link">Privacy Policy</a>
+                <a href="index.html" class="footer-link">UNSAID</a>
+            </div>
+
+            <div class="developer-contact-small">
+                Questions? Email us at: 
+                <a href="mailto:bulastica1@gmail.com" class="email-link-footer">bulastica1@gmail.com</a>
+            </div>
+
+            <div class="copyright">
+                &copy; <script>document.write(new Date().getFullYear())</script> UNSAID. All rights reserved.
+            </div>
+
+        </div>
+    </footer>
+
+</body>
+</html>

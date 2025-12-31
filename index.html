@@ -2,650 +2,705 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="description" content="UNSAID - Anonymous Ephemeral Messaging">
+    <meta name="theme-color" content="#000000">
     <title>UNSAID</title>
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <style>
-        /* ================= CSS STYLES ================= */
+        /* ================= DESIGN SYSTEM (Global Theme) ================= */
         :root {
-            --bg-color: #050505;
-            --header-bg: #111111;
-            --msg-bg: #1e1e1e;
-            --reply-bg: #2a2a2a;
-            --input-bg: #111111;
-            --text-main: #eeeeee;
-            --text-dim: #888888;
-            --accent: #ffffff;
-            --border: #333333;
-            --space-highlight: #bb86fc;
+            /* Palette */
+            --bg: #000000;
+            --surface: #111111;
+            --border: #2A2A2A;
+            --text-main: #E0E0E0;
+            --text-muted: #777777;
+            --accent: #58A6FF;
+            --danger: #FF4444;
+            
+            /* Typography */
+            --font-brand: 'Courier New', monospace;
+            --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            
+            /* Spacing & Layout */
+            --header-height: 60px;
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
         }
 
+        /* Reset & Base */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
+        
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg);
             color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden; 
+            font-family: var(--font-ui);
+            margin: 0; padding: 0;
+            height: 100vh; /* Fallback */
+            height: 100dvh; /* Dynamic Viewport for Mobile Browsers */
+            overflow: hidden;
+            display: flex; flex-direction: column;
         }
 
-        /* --- HEADER --- */
-        header {
-            background-color: var(--header-bg);
-            padding: 10px 15px;
+        .hidden { display: none !important; }
+        button { cursor: pointer; border: none; outline: none; background: none; color: inherit; padding: 0; }
+        a { color: inherit; text-decoration: none; }
+
+        /* ================= 1. NAVIGATION & HEADERS ================= */
+        #view-spaces { flex: 1; display: flex; flex-direction: column; height: 100%; }
+
+        .home-header {
+            height: var(--header-height);
+            padding: 0 15px;
             border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 60px;
-            z-index: 50;
+            display: flex; align-items: center; gap: 12px;
+            background: var(--bg); z-index: 10; flex-shrink: 0;
+            padding-top: env(safe-area-inset-top); /* Notch Support */
+        }
+        
+        .brand-title { 
+            font-family: var(--font-brand); font-weight: 800; font-size: 1.1rem; 
+            letter-spacing: -1px; white-space: nowrap;
         }
 
-        .brand-area { display: flex; flex-direction: column; justify-content: center; }
+        /* Search Component */
+        .search-container { flex: 1; position: relative; }
+        .search-input {
+            width: 100%; background: #111; border: 1px solid #333; color: white;
+            padding: 8px 12px; border-radius: var(--radius-sm); font-size: 0.9rem; outline: none;
+            font-family: var(--font-ui); transition: border-color 0.2s;
+        }
+        .search-input:focus { border-color: var(--text-muted); }
 
-        .brand {
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: 800;
-            font-size: 1.4rem;
-            letter-spacing: 2px;
-            color: var(--text-main);
+        .header-actions { display: flex; gap: 15px; align-items: center; }
+        .icon-btn { font-size: 1.3rem; color: var(--text-main); display: flex; align-items: center; justify-content: center; }
+        .icon-btn.plus { font-size: 1.6rem; font-weight: 300; }
+
+        /* Spaces List */
+        .spaces-list { flex: 1; overflow-y: auto; padding-bottom: 20px; }
+        .space-row {
+            padding: 16px 20px; border-bottom: 1px solid #1a1a1a;
+            display: flex; align-items: center; justify-content: space-between;
+            transition: background 0.1s;
+        }
+        .space-row:active { background: #111; }
+        .space-main { font-size: 1rem; font-weight: 500; }
+        .space-sub { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+
+        /* ================= 2. CHAT INTERFACE ================= */
+        #view-chat { flex: 1; display: flex; flex-direction: column; background: var(--bg); height: 100%; }
+
+        .chat-header {
+            height: 50px; padding: 0 15px; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; gap: 15px; background: var(--bg); flex-shrink: 0;
+            padding-top: env(safe-area-inset-top);
+        }
+        .space-title-display { font-weight: 600; font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .back-btn { font-size: 1.2rem; padding: 10px; margin-left: -10px; }
+
+        #thread-header-bar {
+            background: #0f0f0f; padding: 12px 15px; font-size: 0.9rem; color: var(--accent);
+            border-bottom: 1px solid var(--border); cursor: pointer; display: flex; gap: 10px;
+            font-weight: 500; align-items: center; flex-shrink: 0;
         }
 
-        .current-location {
-            font-size: 0.75rem;
-            color: var(--space-highlight);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        /* The Big "Spaces" Button */
-        .spaces-btn {
-            background: #222;
-            border: 1px solid #444;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .spaces-btn:active { background: #444; }
-
-        /* The Info Button */
-        .info-btn {
-            background: none;
-            border: 1px solid #444;
-            color: #888;
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            margin-left: 10px;
-            cursor: pointer;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-        }
-
-        /* --- FEED --- */
         #feed {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 15px;
-            padding-bottom: 160px; /* Space for footer */
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            scroll-behavior: smooth;
+            flex: 1; overflow-y: scroll; padding: 0; 
+            display: flex; flex-direction: column;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 10px;
         }
 
-        .post {
-            background-color: var(--msg-bg);
-            padding: 12px 15px;
-            border-radius: 4px 16px 16px 16px;
-            max-width: 92%;
-            align-self: flex-start;
-            border-left: 3px solid #444;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            position: relative;
+        /* ================= 3. MESSAGE COMPONENT ================= */
+        @keyframes msgSlideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .post-content { font-size: 0.95rem; line-height: 1.5; white-space: pre-wrap; word-wrap: break-word; }
-
-        /* Replies */
-        .reply-bubble {
-            margin-top: 8px;
-            background-color: var(--reply-bg);
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            color: #ccc;
-            border-left: 2px solid #555;
+        .msg-container {
+            padding: 12px 15px; 
+            border-bottom: 1px solid #1a1a1a;
+            display: flex; flex-direction: column; gap: 4px;
+            position: relative; 
+            transition: transform 0.1s linear; 
+            background: var(--bg);
+            animation: msgSlideIn 0.25s ease-out forwards;
+            
+            /* Gestures */
+            touch-action: pan-y; 
+            user-select: none;
         }
-
-        .post-meta {
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        
+        .msg-header {
+            display: flex; justify-content: space-between; align-items: baseline;
+            margin-bottom: 2px;
         }
+        .msg-alias {
+            font-family: var(--font-brand); font-size: 0.75rem; color: var(--text-muted);
+            font-weight: bold; letter-spacing: -0.5px;
+        }
+        .msg-time { font-size: 0.7rem; color: #444; }
 
-        .badge { font-size: 0.7rem; color: #666; font-weight: bold; text-transform: uppercase; }
+        .msg-body {
+            color: var(--text-main); font-size: 0.95rem; line-height: 1.5;
+            white-space: pre-wrap; word-break: break-word;
+        }
+        .own-message .msg-alias { color: var(--accent); }
 
-        .reply-action {
-            font-size: 0.75rem;
-            color: #aaa;
-            text-decoration: underline;
+        .reply-context {
+            font-size: 0.75rem; color: #666; margin-bottom: 4px;
+            padding-left: 8px; border-left: 2px solid #333;
             cursor: pointer;
-            padding: 5px;
         }
 
-        /* --- INPUT AREA --- */
-        #input-area {
-            position: fixed;
-            bottom: 0; left: 0; width: 100%;
-            background-color: var(--input-bg);
-            border-top: 1px solid var(--border);
-            padding: 10px;
-            z-index: 100;
+        .msg-actions { display: flex; gap: 20px; margin-top: 8px; }
+        .action-btn {
+            font-size: 0.75rem; color: #555; text-transform: uppercase; letter-spacing: 0.5px;
+            padding: 6px 0; font-weight: 600;
         }
+        .action-btn:active { color: var(--text-main); }
 
-        .controls-row { display: flex; gap: 8px; margin-bottom: 8px; overflow-x: auto; }
-
-        select {
-            background: #222;
-            color: #eee;
-            border: 1px solid #333;
-            padding: 5px 10px;
+        /* ================= 4. INPUT & FOOTER ================= */
+        .chat-footer { 
+            background: var(--bg); padding: 10px; border-top: 1px solid var(--border); flex-shrink: 0;
+            padding-bottom: max(10px, env(safe-area-inset-bottom)); /* iPhone X Fix */
+        }
+        
+        .reply-preview-bar {
+            background: #111; padding: 8px; margin-bottom: 8px; border-left: 3px solid var(--accent);
+            display: flex; justify-content: space-between; font-size: 0.8rem; color: #aaa;
             border-radius: 4px;
-            font-size: 0.75rem;
-            outline: none;
         }
 
-        .input-row { display: flex; gap: 10px; align-items: flex-end; }
+        .expiry-bar {
+            display: flex; gap: 8px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 2px;
+        }
+        .expiry-pill {
+            background: #0a0a0a; border: 1px solid #333; color: #666;
+            padding: 5px 12px; border-radius: 14px; font-size: 0.75rem; white-space: nowrap;
+            transition: 0.2s;
+        }
+        .expiry-pill.active { border-color: var(--accent); color: var(--accent); background: rgba(88, 166, 255, 0.1); }
 
+        .input-row { display: flex; align-items: flex-end; gap: 10px; }
         textarea {
-            flex-grow: 1;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: white;
-            padding: 10px;
-            border-radius: 8px;
-            height: 50px;
-            font-size: 1rem;
-            resize: none;
-            outline: none;
-            font-family: inherit;
+            flex: 1; background: #111; border: 1px solid #333; color: white;
+            padding: 12px; border-radius: var(--radius-lg); font-family: inherit; font-size: 1rem;
+            resize: none; height: 46px; outline: none; transition: border-color 0.2s;
         }
-        textarea:focus { border-color: #555; background: #222; }
-
+        textarea:focus { border-color: #555; }
+        
         .send-btn {
-            width: 50px; height: 50px;
-            background: white;
-            color: black;
-            border: none;
-            border-radius: 8px;
+            color: var(--text-main); font-weight: bold; width: 46px; height: 46px;
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer;
-            flex-shrink: 0;
+            border-radius: 50%; background: #222; flex-shrink: 0;
         }
-        .send-btn svg { width: 24px; height: 24px; }
-        .send-btn:active { opacity: 0.8; transform: scale(0.95); }
+        .send-btn:active { background: #333; }
 
-        /* --- MODALS --- */
-        .modal-overlay {
-            display: none; /* Hidden by default */
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 200;
-            align-items: flex-end; /* Bottom sheet on mobile */
-            justify-content: center;
-        }
-        @media (min-width: 600px) { .modal-overlay { align-items: center; } }
-
-        .modal-box {
-            background: #1a1a1a;
-            width: 100%;
-            max-width: 500px;
-            padding: 20px;
-            border-radius: 12px 12px 0 0;
-            border-top: 1px solid #333;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
-        }
-        @media (min-width: 600px) { .modal-box { border-radius: 12px; border: 1px solid #333; } }
-
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .modal-title { font-size: 1.1rem; font-weight: bold; color: white; }
-        .close-btn { background: none; border: none; color: #888; font-size: 1.5rem; cursor: pointer; padding: 0 10px; }
-
-        /* ABOUT SECTION STYLES */
-        .manifesto-line { color: #eee; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem; }
-        .about-section { margin-top: 25px; padding-top: 20px; border-top: 1px solid #333; }
-        .about-title { font-size: 0.8rem; color: var(--space-highlight); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: bold; }
-        .about-text { font-size: 0.9rem; color: #aaa; line-height: 1.6; margin-bottom: 15px; }
-        .feature-list { list-style: none; padding: 0; margin: 0; color: #888; font-size: 0.85rem; line-height: 1.8; }
-        .feature-list li::before { content: "•"; color: #555; display: inline-block; width: 15px; margin-left: -15px; }
-
-        /* Space List Items */
-        .space-option {
-            padding: 15px;
-            border-bottom: 1px solid #333;
-            cursor: pointer;
-            display: flex; justify-content: space-between;
-            color: #ccc;
-        }
-        .space-option:hover { background: #222; color: white; }
-        .space-option.active { color: var(--space-highlight); font-weight: bold; border-left: 3px solid var(--space-highlight); }
-
-        /* Create Space Section */
-        .create-space-area {
-            background: #111;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            border: 1px solid #333;
-        }
-        .create-row { display: flex; gap: 10px; margin-top: 10px; }
-        .space-input {
-            flex-grow: 1;
-            background: #222; border: 1px solid #444;
-            color: white; padding: 10px; border-radius: 6px;
-            outline: none;
-        }
-        .go-btn {
-            background: var(--space-highlight);
-            color: black; border: none;
-            padding: 0 20px; border-radius: 6px;
-            font-weight: bold; cursor: pointer;
+        /* ================= 5. MODALS & OVERLAYS ================= */
+        #view-create, #view-info {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); z-index: 50; padding: 20px;
+            padding-top: max(20px, env(safe-area-inset-top));
         }
 
-        /* Reply Overlay */
-        #reply-overlay {
-            display: none;
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 150;
+        /* About Section Styles */
+        .info-menu-item { 
+            padding: 16px 5px; border-bottom: 1px solid #1a1a1a; cursor: pointer; color: #e0e0e0; 
+            display: flex; justify-content: space-between; align-items: center; transition: background 0.1s;
         }
-        .reply-container {
-            position: absolute; bottom: 20px; left: 5%; width: 90%;
-            background: #222; padding: 15px; border-radius: 10px;
-            border: 1px solid #444;
+        .info-menu-item:active { background-color: #1a1a1a; }
+        .info-arrow { color: #444; font-size: 1.2rem; font-weight: 300; }
+
+        /* Report Modal */
+        #report-modal {
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #151515;
+            border-top: 1px solid var(--danger); z-index: 100; padding: 20px;
+            padding-bottom: max(20px, env(safe-area-inset-bottom));
+            transform: translateY(100%); transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
+        #report-modal.active { transform: translateY(0); }
+        .report-opt { padding: 18px; border-bottom: 1px solid #2a2a2a; color: var(--danger); text-align: center; font-weight: 500; }
+
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="brand-area">
-            <div class="brand">UNSAID</div>
-            <div class="current-location" id="locationLabel">● Global Feed</div>
+    <div id="view-spaces">
+        <header class="home-header">
+            <div class="brand-title">UNSAID</div>
+            <div class="search-container">
+                <input type="text" id="space-search" class="search-input" placeholder="Search..." onkeyup="filterSpaces()">
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn plus" onclick="openCreate()" aria-label="Create Space">＋</button>
+                <button class="icon-btn" onclick="openInfo()" aria-label="Information">ⓘ</button>
+            </div>
+        </header>
+
+        <div class="spaces-list" id="spaces-list-container">
+            <div class="space-row" onclick="enterSpace(null)">
+                <div>
+                    <div class="space-main">🌐 Public Space</div>
+                    <div class="space-sub">Global Feed</div>
+                </div>
+            </div>
+            <div id="community-spaces-anchor"></div>
         </div>
-        
-        <div style="display:flex; align-items:center;">
-            <button class="spaces-btn" onclick="openSpaceModal()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                Change Space
-            </button>
+    </div>
+
+    <div id="view-chat" class="hidden">
+        <header class="chat-header">
+            <button class="back-btn" onclick="goHome()">←</button>
+            <div class="space-title-display" id="chat-title">Public Space</div>
+        </header>
+
+        <div id="thread-header-bar" class="hidden" onclick="exitThread()">
+            <span>← Back to Full Conversation</span>
+        </div>
+
+        <div id="feed"></div>
+
+        <footer class="chat-footer">
+            <div class="expiry-bar">
+                <div class="expiry-pill" onclick="setExpiry(1)" id="exp-1">24h</div>
+                <div class="expiry-pill active" onclick="setExpiry(3)" id="exp-3">3 Days</div>
+                <div class="expiry-pill" onclick="setExpiry(7)" id="exp-7">7 Days</div>
+            </div>
+
+            <div id="reply-bar" class="reply-preview-bar hidden">
+                <span id="reply-text">Replying...</span>
+                <button onclick="cancelReply()">✕</button>
+            </div>
+            <div class="input-row">
+                <textarea id="msg-input" placeholder="Type a message..."></textarea>
+                <button class="send-btn" onclick="submitMessage()">➤</button>
+            </div>
+        </footer>
+    </div>
+
+    <div id="view-create" class="hidden">
+        <h2 style="margin-bottom:30px">New Space</h2>
+        <input type="text" id="new-space-name" placeholder="Space Name (e.g. 'library')" 
+               style="width:100%; padding:15px; background:#111; border:1px solid #333; color:white; margin-bottom:20px; border-radius:var(--radius-sm);">
+        <button onclick="commitCreate()" style="width:100%; padding:15px; background:white; color:black; font-weight:bold; border-radius:var(--radius-sm);">Create</button>
+        <button onclick="closeCreate()" style="width:100%; padding:15px; color:#666; margin-top:10px;">Cancel</button>
+    </div>
+
+    <div id="view-info" class="hidden">
+        <div class="info-sheet" style="display: flex; flex-direction: column; height: 100%; margin-top: 0; padding-top: 10px;">
             
-            <button class="info-btn" onclick="document.getElementById('infoModal').style.display='flex'">i</button>
-        </div>
-    </header>
-
-    <div id="feed">
-        <p style="text-align:center; color:#444; margin-top: 100px;">Connecting to void...</p>
-    </div>
-
-    <div id="infoModal" class="modal-overlay">
-        <div class="modal-box">
-            <div class="modal-header">
-                <span class="modal-title">Manifesto</span>
-                <button class="close-btn" onclick="document.getElementById('infoModal').style.display='none'">✕</button>
-            </div>
-            
-            <div class="manifesto-line">A quiet anonymous space for honest expression.</div>
-            <div class="manifesto-line">No accounts. No tracking. No performance.</div>
-            <div class="manifesto-line">Say what you never say.</div>
-            <div class="manifesto-line">Leave it here. Nothing follows you.</div>
-            <div class="manifesto-line" style="color:#888; font-size:0.85rem; margin-top:10px;">
-                Messages exist only for the time you choose and disappear automatically.
-            </div>
-
-            <div class="about-section">
-                <div class="about-title">About</div>
-                <div class="about-text">
-                    UNSAID is an independent experimental project created by an <strong>Electronics & Communication Engineering student at UBDT College of Engineering</strong>.
+            <div style="display: flex; align-items: center; padding-bottom: 15px; border-bottom: 1px solid #333; margin-bottom: 25px; flex-shrink: 0;">
+                <button onclick="closeInfo()" style="font-size: 1.6rem; padding: 0 15px 0 0; color: var(--text-main); line-height: 1;">←</button>
+                <div style="font-family: var(--font-brand); font-size: 1.4rem; font-weight: 800; letter-spacing: -1px; color: var(--text-main);">
+                    UNSAID
                 </div>
-                <div class="about-text">
-                    It is designed as a communication system — not a social network — focused on anonymity, minimalism, and temporary expression. Other apps remember users. UNSAID is designed to forget.
+            </div>
+
+            <div style="flex: 1; overflow-y: auto; padding-right: 5px; padding-bottom: 50px;">
+                
+                <div style="color: #bbbbbb; font-size: 0.95rem; line-height: 1.6;">
+                    <p style="margin-bottom: 15px;">UNSAID exists for what is rarely allowed to exist elsewhere.</p>
+                    <p style="margin-bottom: 15px;">Most digital spaces require identity, continuity, and visibility. They record, rank, and remember. Over time, expression becomes performance, and silence becomes safer than honesty.</p>
+                    <p style="margin-bottom: 15px;">UNSAID is built on a different assumption.</p>
+                    <p style="margin-bottom: 15px;">It is a quiet, anonymous environment designed for expression without identity. There are no accounts, no profiles, and no persistent presence. What is shared here is not meant to follow anyone, shape a reputation, or become a record.</p>
+                    <p style="margin-bottom: 15px;">Messages exist only for the duration chosen by the person who shares them. When that time ends, they disappear completely. Nothing is archived. Nothing is carried forward.</p>
+                    <p style="margin-bottom: 15px;">UNSAID is not a social network. It does not encourage growth, influence, or engagement. It is a communication system—minimal by design—created to allow thoughts to be expressed and then released.</p>
+                    <p style="margin-bottom: 15px;">This project is an independent experimental initiative created by an Electronics & Communication Engineering student at UBDT College of Engineering. It explores what communication looks like when memory, identity, and permanence are intentionally removed.</p>
+                    <p style="margin-bottom: 15px;">UNSAID does not ask to be followed.</p>
+                    <p style="margin-bottom: 15px;">It does not try to keep you here.</p>
+                    <p style="margin-bottom: 30px;">It exists so that something can be said—and then left behind.</p>
+                    <p style="margin-bottom: 40px; color: var(--text-main); font-weight: 600; font-size: 1rem; border-left: 2px solid var(--accent); padding-left: 15px;">
+                        Anonymous — not permanent.
+                    </p>
                 </div>
-                <div style="font-style:italic; color:#ccc; margin-bottom:15px;">Anonymous — not permanent.</div>
-            </div>
 
-            <div class="about-section">
-                <div class="about-title">Version v1.1</div>
-                <ul class="feature-list" style="padding-left:15px;">
-                    <li>Anonymous text posts</li>
-                    <li>Anonymous replies</li>
-                    <li>User-chosen lifespan</li>
-                    <li>Automatic deletion</li>
-                    <li>No accounts, no analytics, no identity</li>
-                </ul>
-            </div>
+                <div style="border-top: 1px solid #333; padding-top: 25px; margin-bottom: 30px;">
+                    <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: 600;">More Information</div>
+                    
+                   <div class="info-menu-item" onclick="window.location.href='about.html'">
+    <span>More About UNSAID</span> <span class="info-arrow">›</span>
+</div>
 
-            <div class="about-section">
-                <div class="about-title">Privacy Policy</div>
-                <ul class="feature-list" style="padding-left:15px;">
-                    <li>We don't know who you are.</li>
-                    <li>We don't log IP addresses.</li>
-                    <li>Data is physically deleted upon expiry.</li>
-                </ul>
+<div class="info-menu-item" onclick="window.location.href='privacy.html'">
+    <span>Privacy Policy</span> <span class="info-arrow">›</span>
+</div>
+
+<div class="info-menu-item" onclick="window.location.href='terms.html'">
+    <span>Terms of Service</span> <span class="info-arrow">›</span>
+</div>
+
+<div class="info-menu-item" onclick="window.location.href='developer.html'">
+    <span>Developer Contact</span> <span class="info-arrow">›</span>
+</div>
+                </div>
+
+                <button onclick="closeInfo()" style="width:100%; padding:18px; background:#111; color:var(--text-main); border-radius:8px; border: 1px solid #333; font-weight: 600; margin-bottom: 50px;">
+                    Back to Home
+                </button>
             </div>
         </div>
     </div>
 
-    <div id="spaceModal" class="modal-overlay">
-        <div class="modal-box">
-            <div class="modal-header">
-                <span class="modal-title">Select a Space</span>
-                <button class="close-btn" onclick="closeModal('spaceModal')">✕</button>
-            </div>
-
-            <div class="space-option" onclick="switchSpace(null)">
-                <span>🌍 Global Feed</span>
-                <span>All Posts</span>
-            </div>
-
-            <div class="create-space-area">
-                <div style="font-size:0.8rem; color:#888; text-transform:uppercase;">Create or Join Space</div>
-                <div class="create-row">
-                    <input type="text" id="newSpaceInput" class="space-input" placeholder="Name (e.g. 'crush', 'ece')">
-                    <button class="go-btn" onclick="handleCustomSpace()">GO</button>
-                </div>
-            </div>
-
-            <div style="margin-top:20px; font-size:0.8rem; color:#666; padding-bottom:10px; border-bottom:1px solid #333;">ACTIVE NOW</div>
-            <div id="activeSpaceList">
-                </div>
-        </div>
+    <div id="report-modal">
+        <div style="text-align:center; color:#666; margin-bottom:15px; font-size:0.9rem;">REPORT MESSAGE</div>
+        <div class="report-opt" onclick="submitReport()">Spam / Bot</div>
+        <div class="report-opt" onclick="submitReport()">Abusive Content</div>
+        <div style="padding:15px; text-align:center; color:white; margin-top:10px;" onclick="closeReport()">Cancel</div>
     </div>
-
-    <div id="reply-overlay">
-        <div class="reply-container">
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px; color:#ccc;">
-                <span>Replying...</span>
-                <span onclick="closeReply()" style="cursor:pointer; padding:5px;">✕</span>
-            </div>
-            <textarea id="replyInput" placeholder="Write a reply..." style="height:80px; width:100%; margin-bottom:10px;"></textarea>
-            <button onclick="sendReply()" style="width:100%; padding:10px; background:white; border:none; border-radius:5px; font-weight:bold;">SEND REPLY</button>
-        </div>
-    </div>
-
-    <footer id="input-area">
-        <div class="controls-row">
-            <select id="lifespan">
-                <option value="7">7 Days</option>
-                <option value="1">1 Day</option>
-                <option value="30">30 Days</option>
-                <option value="36500">Forever</option>
-            </select>
-            <select id="warningSelect">
-                <option value="">No Warning</option>
-                <option value="Sensitive">Sensitive</option>
-                <option value="Heavy">Heavy</option>
-            </select>
-        </div>
-        
-        <div class="input-row">
-            <textarea id="messageInput" placeholder="Type into the void..."></textarea>
-            <button class="send-btn" onclick="submitPost()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
-            </button>
-        </div>
-    </footer>
 
     <script>
-        // ================= CONFIGURATION =================
+        // CONFIGURATION
         const SUPABASE_URL = 'https://fzqadrwoceetmmckfjhs.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6cWFkcndvY2VldG1tY2tmamhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0NjEwNDIsImV4cCI6MjA4MjAzNzA0Mn0.pMYMEF9jyfJ4CXD7E9XmLj8QSAWJI5-h5iq4S7tU6HI';
-        
         const { createClient } = supabase;
         const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // State
-        let currentSpace = null; // null = Global
-        let activeReplyId = null;
-        let activeReplyExpiry = null;
+        // APP STATE
+        let currentSpace = null;
+        let replyTarget = null;
+        let feedCache = [];
+        let spacesCache = [];
+        let currentThreadRoot = null;
+        let selectedExpiryDays = 3;
+        let mySessionAlias = null;
 
-        // --- INIT & REALTIME SETUP ---
-        window.onload = function() {
-            loadPosts();
+        // INTERACTION VARS
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let swipedElement = null;
 
-            // REALTIME LISTENER
-            // This listens for any NEW post in the database
-            const channel = db.channel('public:posts')
-            .on(
-                'postgres_changes',
-                { event: 'INSERT', schema: 'public', table: 'posts' },
-                (payload) => {
-                    // When a new post happens, we reload the feed automatically
-                    // Note: In a production app we might append locally, but reloading is safer for consistency
-                    console.log('New post detected!', payload);
-                    loadPosts();
-                }
-            )
-            .subscribe();
+        // INITIALIZATION
+        window.onload = function() { 
+            initSessionAlias();
+            loadSpacesList(); 
+            initRealtime(); 
         };
 
-        // --- SPACE LOGIC ---
-        function openSpaceModal() {
-            document.getElementById('spaceModal').style.display = 'flex';
-            loadActiveSpaces();
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-
-        function handleCustomSpace() {
-            const input = document.getElementById('newSpaceInput');
-            let val = input.value.trim().toLowerCase().replace(/[^a-z0-9]/g, ''); // Clean input
-            if(val) {
-                switchSpace(val);
-                input.value = '';
+        // --- IDENTITY SYSTEM (Session Based) ---
+        function initSessionAlias() {
+            let existing = sessionStorage.getItem('unsaid_session_alias');
+            if (!existing) {
+                const adj = [
+                    'Silent','Hazy','Cyber','Lost','Neon','Solar','Lunar','Hollow','Electric',
+                    'Static','Glitch','Rapid','Zero','Dark','Bright','Faint','Prime','Echo',
+                    'Hidden','Secret','Vivid','Rapid','Blue','Red','Gold','Iron','Steel'
+                ];
+                const noun = [
+                    'Ghost','Signal','Echo','Drifter','Pilot','Shadow','Glitch','Node',
+                    'Spark','Voyager','Orbit','Pulse','Wave','Dust','Phantom','Runner',
+                    'System','Core','Link','Byte','Pixel','Cipher','Code','Key','Lock'
+                ];
+                const randomAdj = adj[Math.floor(Math.random() * adj.length)];
+                const randomNoun = noun[Math.floor(Math.random() * noun.length)];
+                const randomNum = Math.floor(1000 + Math.random() * 9000);
+                existing = `${randomAdj}-${randomNoun}-${randomNum}`;
+                sessionStorage.setItem('unsaid_session_alias', existing);
             }
+            mySessionAlias = existing;
+            console.log("User Identity:", mySessionAlias);
         }
 
-        function switchSpace(spaceName) {
-            currentSpace = spaceName;
+// --- NAVIGATION CONTROLLER ---
+        function showView(id) {
+            ['view-spaces', 'view-chat', 'view-create', 'view-info'].forEach(v => document.getElementById(v).classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function enterSpace(name) {
+            currentSpace = name;
             
-            // Update UI
-            const label = document.getElementById('locationLabel');
-            if(currentSpace) {
-                label.innerHTML = `<span style="color:#bb86fc">#${currentSpace}</span>`;
-            } else {
-                label.innerHTML = `● Global Feed`;
-            }
-
-            closeModal('spaceModal');
-            loadPosts();
+            // CRITICAL FIX: Reset state manually WITHOUT rendering old data
+            // We do not use exitThread() here because it triggers a render of the *old* cache.
+            currentThreadRoot = null;
+            feedCache = []; // Clear memory immediately
+            document.getElementById('thread-header-bar').classList.add('hidden');
+            
+            // Set Loading UI
+            document.getElementById('feed').innerHTML = '<div style="padding:40px; text-align:center; color:#333;">Connecting...</div>';
+            document.getElementById('chat-title').innerText = name ? `#${name}` : 'Public Space';
+            
+            showView('view-chat');
+            loadMessages();
         }
 
-        async function loadActiveSpaces() {
-            // Fetch recent posts to find active spaces
-            const { data: posts } = await db.from('posts')
+        function goHome() { 
+            currentSpace = null; 
+            // Here we can safely use exitThread because we are leaving the chat view anyway
+            currentThreadRoot = null;
+            document.getElementById('thread-header-bar').classList.add('hidden');
+            
+            showView('view-spaces'); 
+            loadSpacesList();
+            document.getElementById('space-search').value = '';
+        }
+
+        function openCreate() { showView('view-create'); }
+        function closeCreate() { goHome(); }
+        function openInfo() { showView('view-info'); }
+        function closeInfo() { showView('view-spaces'); }
+        // --- SPACES & SEARCH ---
+        async function loadSpacesList() {
+            const { data } = await db.from('posts')
                 .select('space_name')
                 .neq('space_name', null)
-                .order('created_at', { ascending: false })
-                .limit(50);
+                .order('created_at', {ascending:false})
+                .limit(200);
 
-            if(!posts) return;
-
+            if(!data) return;
             const counts = {};
-            posts.forEach(p => { if(p.space_name) counts[p.space_name] = (counts[p.space_name]||0)+1; });
-            const sorted = Object.keys(counts).sort((a,b) => counts[b] - counts[a]);
-
-            const list = document.getElementById('activeSpaceList');
-            list.innerHTML = sorted.map(s => `
-                <div class="space-option" onclick="switchSpace('${s}')">
-                    <span>#${s}</span>
-                    <span style="font-size:0.8rem; color:#666;">${counts[s]} active</span>
-                </div>
-            `).join('');
-            
-            if(sorted.length === 0) list.innerHTML = "<div style='padding:15px; color:#555;'>No active spaces found. Create one above!</div>";
+            data.forEach(p => counts[p.space_name] = (counts[p.space_name]||0)+1);
+            spacesCache = Object.keys(counts).map(name => ({ name, count: counts[name] }));
+            renderSpacesList(spacesCache);
         }
 
-        // --- FEED LOGIC ---
-        async function loadPosts() {
-            const feed = document.getElementById('feed');
-            
-            // We only show "Loading..." if the feed is empty to avoid flickering on updates
-            if(feed.children.length === 0 || feed.innerHTML.includes("Connecting")) {
-                feed.innerHTML = "<p style='text-align:center; color:#555; margin-top:50px;'>Loading...</p>";
-            }
+        function renderSpacesList(list) {
+            const html = list.map(item => `
+                <div class="space-row" onclick="enterSpace('${item.name}')">
+                    <div>
+                        <div class="space-main">#${item.name}</div>
+                        <div class="space-sub">Community Space</div>
+                    </div>
+                </div>`).join('');
+            document.getElementById('community-spaces-anchor').innerHTML = html || '<div style="padding:20px; color:#444; text-align:center">No matches found</div>';
+        }
 
-// 1. Build Query
-            let query = db.from('posts')
-                .select('*')
-                .is('thread_id', null)
-                .eq('status', 'active')
-                .order('created_at', { ascending: true }) 
-                .limit(70);
+        function filterSpaces() {
+            const query = document.getElementById('space-search').value.toLowerCase();
+            renderSpacesList(spacesCache.filter(s => s.name.includes(query)));
+        }
 
+        function commitCreate() {
+            const val = document.getElementById('new-space-name').value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+            if(val) enterSpace(val);
+        }
+
+        // --- MESSAGING ENGINE ---
+        async function loadMessages() {
+            let query = db.from('posts').select('*').eq('status', 'active').order('created_at', {ascending:true}).limit(100);
             if(currentSpace) query = query.eq('space_name', currentSpace);
             else query = query.is('space_name', null);
+            
+            const { data } = await query;
+            if(data) {
+                feedCache = data;
+                renderCurrentContext();
+            }
+        }
 
-            const { data: posts, error } = await query;
+        function initRealtime() {
+            db.channel('public:posts').on('postgres_changes', {event:'INSERT', schema:'public', table:'posts'}, payload => {
+                // Deduplication check
+                if (feedCache.find(p => p.id === payload.new.id)) return;
+                
+                feedCache.push(payload.new);
+                const isRelevantSpace = (payload.new.space_name === currentSpace) || (!currentSpace && !payload.new.space_name);
+                if(isRelevantSpace) renderCurrentContext();
+            }).subscribe();
+        }
+
+        function renderCurrentContext() {
+            if(currentThreadRoot) viewThread(currentThreadRoot);
+            else renderFeed(feedCache);
+        }
+
+        // --- THREAD SYSTEM (Recursive) ---
+        function viewThread(startId) {
+            let root = feedCache.find(p => p.id === startId);
+            if(!root) return;
+            
+            // Climb up to true root
+            let parent = root;
+            while(parent && parent.thread_id) {
+                const found = feedCache.find(p => p.id === parent.thread_id);
+                if(found) parent = found;
+                else break;
+            }
+            root = parent;
+            currentThreadRoot = root.id;
+
+            // Gather all descendants
+            const treeIds = new Set([root.id]);
+            let added = true;
+            while(added) {
+                added = false;
+                feedCache.forEach(p => {
+                    if(p.thread_id && treeIds.has(p.thread_id) && !treeIds.has(p.id)) {
+                        treeIds.add(p.id);
+                        added = true;
+                    }
+                });
+            }
+
+            const threadPosts = feedCache.filter(p => treeIds.has(p.id));
+            threadPosts.sort((a,b) => new Date(a.created_at) - new Date(b.created_at));
+
+            document.getElementById('thread-header-bar').classList.remove('hidden');
+            renderFeed(threadPosts, true);
+        }
+
+        function exitThread() {
+            currentThreadRoot = null;
+            document.getElementById('thread-header-bar').classList.add('hidden');
+            renderFeed(feedCache);
+        }
+
+        function renderFeed(posts, isThreadView = false) {
+            const feed = document.getElementById('feed');
+            feed.innerHTML = '';
+            
+            posts.forEach(post => {
+                const el = document.createElement('div');
+                el.className = 'msg-container';
+                if(post.author_alias === mySessionAlias) el.classList.add('own-message');
+
+                // Gesture Binding
+                el.ontouchstart = (e) => handleSwipeStart(e, el);
+                el.ontouchmove = (e) => handleSwipeMove(e, el);
+                el.ontouchend = (e) => handleSwipeEnd(e, el, post.id, post.content);
+
+                const displayAlias = post.author_alias || 'anonymous';
+                const time = new Date(post.created_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+
+                let replyCtx = '';
+                if(post.thread_id) {
+                    const parent = feedCache.find(p => p.id === post.thread_id);
+                    const pText = parent ? parent.content.substring(0, 30)+'...' : 'Message unavailable';
+                    const pAlias = parent ? (parent.author_alias || 'anon') : 'unknown';
+                    replyCtx = `<div class="reply-context" onclick="viewThread('${post.thread_id}')">↪ <b>${pAlias}</b>: ${escapeHtml(pText)}</div>`;
+                }
+
+                el.innerHTML = `
+                    <div class="msg-header">
+                        <div class="msg-alias">${displayAlias}</div>
+                        <div class="msg-time">${time}</div>
+                    </div>
+                    ${replyCtx}
+                    <div class="msg-body">${escapeHtml(post.content)}</div>
+                    <div class="msg-actions">
+                        <button class="action-btn" onclick="initReply('${post.id}', '${escapeHtml(post.content)}')">Reply</button>
+                        <button class="action-btn" onclick="viewThread('${post.id}')">Thread</button>
+                        <button class="action-btn" onclick="openReport()">Report</button>
+                    </div>
+                `;
+                feed.appendChild(el);
+            });
+            if(!isThreadView) feed.scrollTop = feed.scrollHeight;
+        }
+
+        // --- GESTURE LOGIC (Swipe to Reply) ---
+        function handleSwipeStart(e, el) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            swipedElement = el;
+            el.style.transition = 'none';
+        }
+
+        function handleSwipeMove(e, el) {
+            if(!swipedElement) return;
+            const currentX = e.touches[0].clientX;
+            const diffX = currentX - touchStartX;
+            const diffY = e.touches[0].clientY - touchStartY;
+
+            // Only horizontal swipe allowed
+            if(diffX > 5 && Math.abs(diffY) < 30) {
+                if(e.cancelable) e.preventDefault(); // Stop scroll
+                const moveAmount = Math.min(diffX, 70);
+                el.style.transform = `translateX(${moveAmount}px)`;
+            }
+        }
+
+        function handleSwipeEnd(e, el, id, content) {
+            if(!swipedElement) return;
+            const diffX = e.changedTouches[0].clientX - touchStartX;
+            
+            // Spring animation
+            el.style.transition = 'transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            el.style.transform = 'translateX(0)';
+            
+            if(diffX > 50 && Math.abs(e.changedTouches[0].clientY - touchStartY) < 30) {
+                if(navigator.vibrate) navigator.vibrate(10);
+                initReply(id, escapeHtml(content));
+            }
+            swipedElement = null;
+        }
+
+// --- COMPOSER LOGIC ---
+        function setExpiry(days) {
+            selectedExpiryDays = days;
+            document.querySelectorAll('.expiry-pill').forEach(p => p.classList.remove('active'));
+            document.getElementById('exp-'+days).classList.add('active');
+        }
+
+        function initReply(id, text) {
+            replyTarget = { id, text };
+            document.getElementById('reply-bar').classList.remove('hidden');
+            document.getElementById('reply-text').innerText = `Replying to: ${text.substring(0,20)}...`;
+            document.getElementById('msg-input').focus();
+        }
+
+        function cancelReply() {
+            replyTarget = null;
+            document.getElementById('reply-bar').classList.add('hidden');
+        }
+
+        async function submitMessage() {
+            const input = document.getElementById('msg-input');
+            const text = input.value.trim();
+            if(!text) return;
+
+            const expiry = new Date();
+            expiry.setDate(expiry.getDate() + selectedExpiryDays);
+
+            // LOGIC FIX: DETERMINE PARENT ID
+            // 1. Is user replying to a specific message? Use that ID.
+            // 2. Is user just looking at a thread? Use the Thread Root ID.
+            // 3. Otherwise, it is a new main feed post (null).
+            let finalThreadId = null;
+            
+            if (replyTarget) {
+                finalThreadId = replyTarget.id;
+            } else if (currentThreadRoot) {
+                finalThreadId = currentThreadRoot;
+            }
+
+            const payload = {
+                content: text,
+                space_name: currentSpace,
+                expiry_time: expiry.toISOString(),
+                thread_id: finalThreadId,
+                author_alias: mySessionAlias || 'Anonymous-User'
+            };
+
+            // Optimistic UI Update
+            input.value = '';
+            cancelReply();
+
+            const { data, error } = await db.from('posts').insert(payload).select();
 
             if(error) {
                 console.error(error);
-                return;
-            }
-
-            // 2. Fetch Replies
-            const { data: replies } = await db.from('posts')
-                .select('*')
-                .not('thread_id', 'is', null)
-                .eq('status', 'active');
-
-            // 3. Render
-            feed.innerHTML = "";
-            if(!posts || posts.length === 0) {
-                feed.innerHTML = `<p style='text-align:center; color:#555; margin-top:50px;'>
-                    ${currentSpace ? 'Space #'+currentSpace+' is empty.' : 'The void is empty.'}
-                </p>`;
+                alert("Failed to send. Please check connection.");
             } else {
-                posts.forEach(p => {
-                    const threadReplies = replies ? replies.filter(r => r.thread_id === p.id) : [];
-                    feed.appendChild(createPostElement(p, threadReplies));
-                });
-                // Scroll to bottom
-                feed.scrollTop = feed.scrollHeight;
+                if(data && data[0]) {
+                    // Only add to feed manually if we haven't received it via Realtime yet
+                    if (!feedCache.find(p => p.id === data[0].id)) {
+                        feedCache.push(data[0]);
+                        renderCurrentContext();
+                    }
+                }
             }
         }
 
-        function createPostElement(post, replies) {
-            const div = document.createElement('div');
-            div.className = 'post';
-
-            const date = new Date(post.created_at || post.expiry_time);
-            const timeStr = date.getHours() < 12 ? "Morning" : date.getHours() < 18 ? "Afternoon" : "Night";
-
-            let badges = `<span class="badge">${timeStr}</span>`;
-            if(post.content_warning) badges += ` <span class="badge" style="color:#ff6b6b; border:1px solid #ff6b6b; padding:0 4px; border-radius:3px;">${post.content_warning}</span>`;
-
-            const replyBtn = post.allow_replies 
-                ? `<span class="reply-action" onclick="openReply('${post.id}', '${post.expiry_time}')">Reply</span>` 
-                : ``;
-
-            const repliesHtml = replies.map(r => `<div class="reply-bubble">↳ ${escapeHtml(r.content)}</div>`).join('');
-
-            div.innerHTML = `
-                <div class="post-content">${escapeHtml(post.content)}</div>
-                <div class="post-meta">
-                    <div>${badges}</div>
-                    ${replyBtn}
-                </div>
-                ${repliesHtml}
-            `;
-            return div;
-        }
-
-        // --- POSTING ---
-        async function submitPost() {
-            const input = document.getElementById('messageInput');
-            const content = input.value;
-            if(!content.trim()) return;
-
-            const days = parseInt(document.getElementById('lifespan').value);
-            const warning = document.getElementById('warningSelect').value || null;
-
-            const expiry = new Date();
-            expiry.setDate(expiry.getDate() + days);
-
-            input.value = '';
-
-            await db.from('posts').insert({
-                content: content,
-                expiry_time: expiry.toISOString(),
-                created_at: new Date().toISOString(),
-                status: 'active',
-                space_name: currentSpace,
-                allow_replies: true,
-                content_warning: warning
-            });
-        }
-
-        // --- REPLYING ---
-        function openReply(id, expiry) {
-            activeReplyId = id;
-            activeReplyExpiry = expiry;
-            document.getElementById('reply-overlay').style.display = 'block';
-            document.getElementById('replyInput').focus();
-        }
-
-        function closeReply() {
-            document.getElementById('reply-overlay').style.display = 'none';
-        }
-
-        async function sendReply() {
-            const input = document.getElementById('replyInput');
-            if(!input.value.trim()) return;
-
-            await db.from('posts').insert({
-                content: input.value,
-                thread_id: activeReplyId,
-                expiry_time: activeReplyExpiry,
-                created_at: new Date().toISOString(),
-                status: 'active',
-                space_name: currentSpace
-            });
-
-            input.value = '';
-            closeReply();
-        }
-
-        function escapeHtml(text) {
-            return text ? text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
-        }
+        // UTILITIES
+        function escapeHtml(t) { return t ? t.replace(/&/g,"&amp;").replace(/</g,"&lt;") : ""; }
+        function openReport() { document.getElementById('report-modal').classList.add('active'); }
+        function closeReport() { document.getElementById('report-modal').classList.remove('active'); }
+        function submitReport() { alert("Report submitted."); closeReport(); }
     </script>
 </body>
 </html>

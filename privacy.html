@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Privacy Policy | UNSAID</title>
+    
+    <style>
+        /* ================= LEGAL DESIGN SYSTEM ================= */
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --border: #333333;
+            --text-main: #E0E0E0;
+            --text-muted: #888888;
+            --accent: #58A6FF;
+            --font-brand: 'Courier New', monospace;
+            --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-ui);
+            margin: 0; padding: 0;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 25px 150px 25px;
+        }
+
+        /* BRAND HEADER */
+        h1 {
+            font-family: var(--font-brand);
+            font-weight: 800;
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            color: white;
+            letter-spacing: -2px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 50px;
+            font-family: var(--font-brand);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 25px;
+        }
+
+        /* NOTICE BOX */
+        .legal-notice {
+            background: #111;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 15px;
+            font-size: 0.85rem;
+            margin-bottom: 40px;
+            font-family: var(--font-brand);
+        }
+
+        /* HEADINGS */
+        h2 {
+            font-family: var(--font-ui);
+            font-size: 1.25rem;
+            color: white;
+            margin-top: 60px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-left: 4px solid var(--border);
+            padding-left: 15px;
+        }
+
+        h3 {
+            font-size: 1rem;
+            color: var(--text-main);
+            margin-top: 35px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-decoration: underline;
+            text-decoration-color: #333;
+        }
+
+        p {
+            color: #cccccc;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-bottom: 25px;
+            color: #bbb;
+        }
+        li { margin-bottom: 10px; }
+
+        /* DEFENSE CLAUSES */
+        .defense-clause {
+            background: #0f0f0f;
+            border-left: 2px solid #444;
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 0.95rem;
+            color: #aaa;
+        }
+
+        /* NAVIGATION FOOTER */
+        .footer-nav {
+            margin-top: 100px;
+            padding-top: 60px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .primary-btn {
+            display: inline-block;
+            padding: 18px 50px;
+            background: white;
+            color: black;
+            text-decoration: none;
+            font-weight: 800;
+            font-family: var(--font-brand);
+            letter-spacing: -1px;
+            margin-bottom: 40px;
+            transition: transform 0.2s;
+        }
+        .primary-btn:hover { transform: scale(1.02); }
+
+        .secondary-links {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .sec-link {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s;
+        }
+        .sec-link:hover { color: var(--accent); border-color: var(--accent); }
+
+        .divider { color: #333; }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <h1>UNSAID</h1>
+        <div class="subtitle">Privacy Policy </div>
+        
+        <div class="legal-notice">
+            <strong>NOTICE TO USERS:</strong> THIS AGREEMENT CONTAINS A BINDING ARBITRATION PROVISION AND WAIVER OF CLASS ACTION RIGHTS. BY USING UNSAID, YOU ACCEPT THESE TERMS IN FULL.
+        </div>
+
+        <p><strong>Effective Date:</strong> January 1, 2026</p>
+        <p>UNSAID (“the Service,” “we,” “us,” or “Platform”) is an experimental, anonymous communication infrastructure. This document outlines the technical and legal realities of using the Service. Our architecture is designed to minimize data retention ("Privacy by Design").</p>
+
+        <h2>1. Zero-Knowledge Architecture</h2>
+        <p>UNSAID is architected to operate without knowing who you are. We do not possess the technical capability to link a user to their real-world identity.</p>
+        
+        <h3>1.1 No Personal Data Collection</h3>
+        <p>We strictly do not collect, process, or store the following data categories:</p>
+        <ul>
+            <li>Names, addresses, emails, or phone numbers.</li>
+            <li>Passwords, biometric data, or social media identifiers.</li>
+            <li>GPS location data or precise geolocation.</li>
+            <li>Device Identifiers (IDFA, AAID) or MAC addresses.</li>
+        </ul>
+        
+        <h3>1.2 The "Session Alias" Mechanism</h3>
+        <p>Identity on UNSAID is ephemeral. Upon accessing the Service, your browser locally generates a random cryptographic string (e.g., "Neon-Ghost-9921").</p>
+        <div class="defense-clause">
+            <strong>Technical Reality:</strong> This alias exists <em>only</em> in your browser's volatile memory (Session Storage). We do not maintain a master key or database linking this alias to an IP address. Once you close your browser tab, the key to that identity is destroyed on the client side, making re-identification technically impossible.
+        </div>
+
+        <h2>2. Data Lifecycle & Irreversible Deletion</h2>
+        
+        <h3>2.1 Ephemeral Content</h3>
+        <p>All User-Generated Content (UGC) is subject to a strict Time-to-Live (TTL) parameter chosen by the user (24 hours, 3 days, or 7 days).</p>
+        
+        <h3>2.2 The Purge Protocol</h3>
+        <p>When the TTL expires, the following sequence occurs automatically:</p>
+        <ol>
+            <li><strong>Soft Logic:</strong> Row Level Security (RLS) policies immediately block the content from being read via the API.</li>
+            <li><strong>Hard Deletion:</strong> Database cron jobs trigger a physical deletion of the row.</li>
+        </ol>
+        <div class="defense-clause">
+            <strong>Defense of Non-Production:</strong> We cannot produce data that has been deleted. We do not maintain "shadow backups" or "cold storage" of expired messages for surveillance purposes. If a message is gone from the UI, it is gone from our infrastructure.
+        </div>
+
+        <h2>3. Third-Party Infrastructure</h2>
+        <p>UNSAID utilizes <strong>Supabase</strong> (a Backend-as-a-Service provider) to host its database and realtime capabilities.</p>
+        <ul>
+            <li><strong>Data Processing:</strong> Supabase processes connection requests to facilitate data transfer. While standard TCP/IP logs may transiently exist at the network layer for DDoS protection, UNSAID does not ingest these logs for user profiling.</li>
+        </ul>
+
+        <h3>3.1 No Analytics or Ad Tech</h3>
+        <p>We strictly do <strong>NOT</strong> use:</p>
+        <ul>
+            <li>Behavioral analytics (e.g., Google Analytics, Mixpanel).</li>
+            <li>Targeted advertising pixels (e.g., Facebook Pixel).</li>
+            <li>Third-party tracking scripts or fingerprinting tools.</li>
+            <li>User profiling algorithms.</li>
+        </ul>
+
+        <h2>4. Community Moderation & Reporting</h2>
+        <p>UNSAID relies on a community-driven moderation model to maintain safety without compromising anonymity.</p>
+        <ul>
+            <li><strong>Anonymous Reporting:</strong> Users may report content for spam or abuse. These reports do not identify the reporter.</li>
+            <li><strong>Safety Protocol:</strong> Reports are used solely for content moderation. Content removal does not imply identification, attribution, or investigation of any user.</li>
+            <li><strong>No Logs:</strong> The act of reporting does not create a persistent user record.</li>
+        </ul>
+
+        <h2>5. Children's Privacy</h2>
+        <p>UNSAID is not directed to children under 13 (or the equivalent minimum age in your jurisdiction).</p>
+        <div class="defense-clause">
+            <strong>Compliance Statement:</strong> We do not knowingly collect or process data from children. If we become aware that a child has used the Service, we will take immediate steps to delete any associated information. If you believe a child has used the Service, please discontinue use immediately.
+        </div>
+
+        <h2>6. User Liability & Indemnification</h2>
+        <p>UNSAID acts solely as a passive conduit for the distribution of user-submitted information.</p>
+
+        <h3>6.1 Intermediary Liability</h3>
+        <p>Under international laws regarding intermediary liability, we are not the publisher or speaker of any information provided by another information content provider. We are not liable for defamatory, offensive, illegal, or infringing content posted by anonymous users.</p>
+
+        <h3>6.2 Indemnification</h3>
+        <p>By using the Service, you agree to indemnify, defend, and hold harmless UNSAID, its developers, and affiliates from any claims, liabilities, damages, or costs (including legal fees) arising from content you post.</p>
+
+        <h2>7. Law Enforcement & Subpoenas</h2>
+        <p>We cooperate with law enforcement to the extent legally required, but we are constrained by our architecture.</p>
+        
+        <div class="defense-clause">
+            <strong>"Cannot Give What We Do Not Have":</strong> If served with a valid subpoena or court order, we can only provide data that actually exists in the database at that exact moment. We cannot provide:
+            <ul>
+                <li>The real name or email of a user (We do not collect it).</li>
+                <li>Content that has already expired (It is deleted).</li>
+                <li>Future decryption keys for user sessions (We do not possess them).</li>
+            </ul>
+        </div>
+
+        <h2>8. Global & Regional Compliance</h2>
+        
+        <h3>8.1 GDPR (Europe) & CCPA (California)</h3>
+        <p>Since we do not collect "Personal Data" linked to an identified or identifiable natural person, the majority of processing requirements do not apply. However, we grant rights to Erasure simply by allowing messages to expire.</p>
+        
+        <h3>8.2 India (IT Act, 2000 & DPDP Act, 2023)</h3>
+        <p>For users in India, UNSAID operates as an "Intermediary" as defined under Section 2(1)(w) of the Information Technology Act, 2000.</p>
+        
+        <div class="defense-clause">
+            <strong>Safe Harbor Protection (Section 79):</strong>
+            Under Section 79 of the IT Act, 2000, UNSAID acts solely as a technical facilitator. We are not liable for any third-party information, data, or communication link made available or hosted by us.
+            <br><br>
+            <strong>Grievance Mechanism:</strong>
+            In compliance with the Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021, if you encounter content that violates Indian law, you must report it to our Grievance Officer via the contact email below. Upon receiving actual knowledge of unlawful content via a court order, we will remove such content within 36 hours.
+        </div>
+
+        <p><strong>DPDP Act, 2023 Compliance:</strong> As UNSAID does not collect "Personal Data" (data about an individual who is identifiable by or in relation to such data), the processing obligations of a Data Fiduciary do not apply to our session-based architecture.</p>
+
+        <h2>9. Limitation of Liability</h2>
+        <p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE." TO THE MAXIMUM EXTENT PERMITTED BY LAW, UNSAID DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED. WE SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES.</p>
+
+        <h2>10. Dispute Resolution</h2>
+        <p>Any dispute arising from these terms shall be resolved through binding arbitration, rather than in court. You waive any right to participate in a class-action lawsuit against UNSAID.</p>
+
+        <div class="footer-nav">
+            
+            <a href="index.html" class="primary-btn">RETURN TO TOP</a>
+
+            <div class="secondary-links">
+                <a href="about.html" class="sec-link">More About UNSAID</a>
+                <span class="divider">/</span>
+                <a href="terms.html" class="sec-link">Terms & Conditions</a>
+                <span class="divider">/</span>
+                <a href="mailto: bulastica1@gmail.com" class="sec-link">Suggestions and feedback</a>
+            </div>
+
+            <p style="text-align: center; font-size: 0.7rem; color: #444; margin-top: 40px; font-family: var(--font-brand);">
+                UNSAID PRIVACY POLICY V1.1
+            </p>
+        </div>
+
+    </div>
+
+</body>
+</html>

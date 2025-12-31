@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>About UNSAID</title>
+    
+    <style>
+        /* ================= DESIGN SYSTEM (Shared with Main App) ================= */
+        :root {
+            --bg: #000000;
+            --surface: #111111;
+            --border: #333333;
+            --text-main: #E0E0E0;
+            --text-muted: #888888;
+            --accent: #58A6FF;
+            --font-brand: 'Courier New', monospace;
+            --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-ui);
+            margin: 0; padding: 0;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* LAYOUT */
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 50px 25px 100px 25px;
+        }
+
+        /* TYPOGRAPHY */
+        h1 {
+            font-family: var(--font-brand);
+            font-weight: 800;
+            font-size: 2.2rem;
+            letter-spacing: -2px;
+            margin-bottom: 5px;
+            color: var(--text-main);
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 60px;
+            font-family: var(--font-brand);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 25px;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-top: 60px;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        p { margin-bottom: 20px; color: #cccccc; }
+        strong { color: white; font-weight: 600; }
+
+        /* FEATURE GRID */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        @media (min-width: 600px) { .feature-grid { grid-template-columns: 1fr 1fr; } }
+
+        .feature-card {
+            background: #0f0f0f;
+            border: 1px solid #222;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .feature-title { font-weight: bold; margin-bottom: 8px; color: white; }
+        .feature-desc { font-size: 0.9rem; color: #888; margin: 0; }
+
+        /* FAQ SECTION */
+        .faq-item {
+            border-bottom: 1px solid #222;
+            padding: 20px 0;
+        }
+        .faq-q {
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            display: block;
+        }
+        .faq-a {
+            color: #888;
+            font-size: 0.95rem;
+            display: block;
+        }
+
+        /* FOOTER */
+        .footer-nav {
+            margin-top: 100px;
+            border-top: 1px solid var(--border);
+            padding-top: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .back-link {
+            font-family: var(--font-brand);
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            border: 1px solid #333;
+            padding: 15px 30px;
+            border-radius: 30px;
+        }
+        .back-link:hover { color: var(--text-main); border-color: #555; background: #111; }
+
+        .legal-row {
+            display: flex;
+            gap: 20px;
+            font-size: 0.85rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .legal-link {
+            text-decoration: none;
+            color: #555;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .legal-link:hover { color: var(--accent); }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <h1>UNSAID</h1>
+        <div class="subtitle">Documentation & Philosophy</div>
+
+        <p><strong>UNSAID is an ephemeral communication system built for honesty.</strong></p>
+        <p>In a digital world that records every click, creates permanent profiles, and ranks us by engagement, silence often feels safer than expression. We curate our lives because we know the internet never forgets.</p>
+        <p>UNSAID removes the memory. It removes the profile. It removes the metrics.</p>
+        <p>What remains is a pure stream of thought—text that exists for a chosen moment and then vanishes completely. It is designed to be a digital "safe space" where you can speak without the weight of identity attached to your words.</p>
+
+        <h2>How It Works</h2>
+        <p>The interface is minimal by design, but dense with utility. Here is how to navigate the system.</p>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-title">Fluid Identity</div>
+                <p class="feature-desc">You don't have an account. When you open the site, you are assigned a random Alias (e.g., <em>Neon-Signal-9921</em>). This alias lasts until you close your tab or refresh. Next time, you will be someone new.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-title">Swipe to Reply</div>
+                <p class="feature-desc">To keep the interface clean, reply buttons are secondary. Simply <strong>swipe right</strong> on any message bubble to instantly quote it and start a reply.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-title">Spaces</div>
+                <p class="feature-desc">Conversations happen in Spaces. The <strong>Global Feed</strong> is public to everyone. You can create or join specific topics (e.g., <em>#music</em>, <em>#vent</em>) using the search bar.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-title">Time Limits</div>
+                <p class="feature-desc">Before sending, tap the timer pill (24h, 3 Days, 7 Days). This is the lifespan of your message. Once it expires, it is physically deleted from the database.</p>
+            </div>
+        </div>
+
+        <h3>Deep Threading</h3>
+        <p>Unlike standard chat apps, UNSAID supports infinite threading. You can reply to a reply to a reply. Clicking "View Thread" isolates that specific conversation branch, allowing for focused discussions without the noise of the main feed.</p>
+
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+            <span class="faq-q">Am I truly anonymous?</span>
+            <span class="faq-a">Yes. We do not require an email, phone number, or password. We do not log IP addresses for tracking purposes. Your "Alias" is generated locally on your device and resets every session.</span>
+        </div>
+
+        <div class="faq-item">
+            <span class="faq-q">Can I get my old alias back?</span>
+            <span class="faq-a">No. Once you close your tab or clear your cache, that identity is lost forever. This is intentional to prevent long-term tracking or reputation building.</span>
+        </div>
+
+        <div class="faq-item">
+            <span class="faq-q">Where do messages go when they expire?</span>
+            <span class="faq-a">Nowhere. They are not "archived" or "hidden." Our database runs a cleanup function that physically overwrites and deletes the row. They are gone.</span>
+        </div>
+
+        <div class="faq-item">
+            <span class="faq-q">Why can't I edit my message?</span>
+            <span class="faq-a">UNSAID captures a moment in time. Once said, it stands. If you regret it, you must wait for it to fade away, or you can report it for removal if it violates terms.</span>
+        </div>
+
+        <div class="faq-item">
+            <span class="faq-q">Can I create a private space?</span>
+            <span class="faq-a">Currently, all Spaces are public. If you create a Space with a complex name (e.g., <em>#x99-secret-club</em>), it acts as a semi-private room, but anyone who guesses the name can enter.</span>
+        </div>
+
+        <div class="faq-item">
+            <span class="faq-q">Is this project finished?</span>
+            <span class="faq-a">UNSAID is an experimental initiative. It is "finished" in its core philosophy, but we may refine the experience based on how people use it.</span>
+        </div>
+
+        <div class="footer-nav">
+            <a href="index.html" class="back-link">Back to UNSAID</a>
+
+            <div class="legal-row">
+                <span class="legal-link" onclick="window.location.href='privacy.html'">Privacy Policy</span>
+                <span class="legal-link" onclick="window.location.href='terms.html'">Terms of Service</span>
+                <span class="legal-link" onclick="window.location.href='developer.html'">Developer Contact</span>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
