@@ -26,12 +26,25 @@
             --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             
             /* Spacing & Layout */
-            --header-height: 60px;
+            --header-height: 65px; /* Slightly Taller for bigger logo */
             --radius-sm: 6px;
             --radius-md: 12px;
             --radius-lg: 20px;
         }
+:root {
+            /* ... (your existing variables) ... */
+            --radius-lg: 20px;
+        } /* <--- PASTE RIGHT AFTER THIS BRACKET */
 
+        /* BRIGHT MODE OVERRIDES */
+        [data-theme="light"] {
+            --bg: #F5F5F7;           /* Off-white background */
+            --surface: #FFFFFF;      /* Pure white cards */
+            --border: #D1D1D6;       /* Light grey borders */
+            --text-main: #000000;    /* Black text */
+            --text-muted: #666666;   /* Grey text */
+            --danger: #FF3B30;
+        }
         /* Reset & Base */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
@@ -62,9 +75,27 @@
             padding-top: env(safe-area-inset-top); /* Notch Support */
         }
         
+        /* SHINE ANIMATION */
+        @keyframes shine {
+            0% { background-position: 200% center; }
+            100% { background-position: -200% center; }
+        }
+
         .brand-title { 
-            font-family: var(--font-brand); font-weight: 800; font-size: 1.1rem; 
-            letter-spacing: -1px; white-space: nowrap;
+            font-family: var(--font-brand); 
+            font-weight: 900; 
+            font-size: 1.8rem; /* ENLARGED */
+            letter-spacing: -1px; 
+            white-space: nowrap;
+            
+            /* SHINE EFFECT */
+            background: linear-gradient(to right, #fff 20%, #58A6FF 40%, #58A6FF 60%, #fff 80%);
+            background-size: 200% auto;
+            color: #fff;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite;
         }
 
         /* Search Component */
@@ -140,8 +171,9 @@
             margin-bottom: 2px;
         }
         .msg-alias {
-            font-family: var(--font-brand); font-size: 0.75rem; color: var(--text-muted);
+            font-family: var(--font-brand); font-size: 0.75rem; 
             font-weight: bold; letter-spacing: -0.5px;
+            /* Color set by JS */
         }
         .msg-time { font-size: 0.7rem; color: #444; }
 
@@ -149,7 +181,9 @@
             color: var(--text-main); font-size: 0.95rem; line-height: 1.5;
             white-space: pre-wrap; word-break: break-word;
         }
-        .own-message .msg-alias { color: var(--accent); }
+        
+        /* Own message styling handled by color logic now, or keep this for layout */
+        /* .own-message .msg-alias { color: var(--accent); } */ 
 
         .reply-context {
             font-size: 0.75rem; color: #666; margin-bottom: 4px;
@@ -225,7 +259,65 @@
         }
         #report-modal.active { transform: translateY(0); }
         .report-opt { padding: 18px; border-bottom: 1px solid #2a2a2a; color: var(--danger); text-align: center; font-weight: 500; }
+/* ================= BRIGHT MODE UI PATCHES ================= */
+        
+        /* 1. Fix the Search Bar */
+        [data-theme="light"] .search-input {
+            background: #ffffff;      /* White background */
+            color: #000000;           /* Black text */
+            border: 1px solid #d1d1d6; /* Light border */
+        }
+        [data-theme="light"] .search-input::placeholder {
+            color: #888888;
+        }
+        [data-theme="light"] .search-input:focus {
+            border-color: #007aff;    /* Blue border on focus */
+        }
 
+        /* 2. Fix the Expiry Pills (24h, 3d, 7d) */
+        [data-theme="light"] .expiry-pill {
+            background: #ffffff;
+            color: #666666;
+            border: 1px solid #d1d1d6;
+        }
+        [data-theme="light"] .expiry-pill.active {
+            background: #e6f2ff;
+            color: #007aff;
+            border-color: #007aff;
+        }
+
+        /* 3. Fix the Message Input Area */
+        [data-theme="light"] textarea {
+            background: #ffffff;
+            color: #000000;
+            border: 1px solid #d1d1d6;
+        }
+        [data-theme="light"] textarea:focus {
+            background: #ffffff;
+            border-color: #007aff;
+        }
+
+        /* 4. Fix the Send Button */
+        [data-theme="light"] .send-btn {
+            background: #000000;      /* Solid black for contrast */
+            color: #ffffff;
+        }
+        [data-theme="light"] .send-btn:active {
+            background: #333333;
+        }
+
+        /* 5. Fix the About Section Links & Back Button */
+        [data-theme="light"] .info-menu-item {
+            color: #111111;
+            border-bottom-color: #e5e5e5;
+            font-weight: 500;
+        }
+        [data-theme="light"] .info-arrow {
+            color: #007aff;
+        }
+        [data-theme="light"] .info-sheet button {
+             color: #000000 !important; /* Forces back button to be black */
+        }
     </style>
 </head>
 <body>
@@ -284,26 +376,46 @@
     </div>
 
     <div id="view-create" class="hidden">
-        <h2 style="margin-bottom:30px">New Space</h2>
-        <input type="text" id="new-space-name" placeholder="Space Name (e.g. 'library')" 
-               style="width:100%; padding:15px; background:#111; border:1px solid #333; color:white; margin-bottom:20px; border-radius:var(--radius-sm);">
-        <button onclick="commitCreate()" style="width:100%; padding:15px; background:white; color:black; font-weight:bold; border-radius:var(--radius-sm);">Create</button>
-        <button onclick="closeCreate()" style="width:100%; padding:15px; color:#666; margin-top:10px;">Cancel</button>
-    </div>
+        <h2 style="margin-bottom:20px; font-family:var(--font-brand); color:var(--text-main);">Initialize Space</h2>
+        
+        <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px;">Space Name</div>
+        <input type="text" id="new-space-name" placeholder="e.g. 'philosophy'" 
+               style="width:100%; padding:15px; background:#111; border:1px solid #333; color:white; margin-bottom:20px; border-radius:var(--radius-sm); font-family: var(--font-brand);">
+        
+        <div style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 5px;">Topic / First Signal</div>
+        <textarea id="new-space-topic" placeholder="What is this space about? This will be the first message..." 
+               style="width:100%; padding:15px; background:#111; border:1px solid #333; color:white; margin-bottom:25px; border-radius:var(--radius-sm); height: 100px; resize: none;"></textarea>
 
-    <div id="view-info" class="hidden">
+        <button onclick="commitCreate()" style="width:100%; padding:15px; background:var(--text-main); color:var(--bg); font-weight:bold; border-radius:var(--radius-sm);">Transmit Signal</button>
+        <button onclick="closeCreate()" style="width:100%; padding:15px; color:var(--text-muted); margin-top:10px;">Cancel</button>
+    </div> <div id="view-info" class="hidden">
         <div class="info-sheet" style="display: flex; flex-direction: column; height: 100%; margin-top: 0; padding-top: 10px;">
             
-            <div style="display: flex; align-items: center; padding-bottom: 15px; border-bottom: 1px solid #333; margin-bottom: 25px; flex-shrink: 0;">
-                <button onclick="closeInfo()" style="font-size: 1.6rem; padding: 0 15px 0 0; color: var(--text-main); line-height: 1;">←</button>
-                <div style="font-family: var(--font-brand); font-size: 1.4rem; font-weight: 800; letter-spacing: -1px; color: var(--text-main);">
-                    UNSAID
+            <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 15px; border-bottom: 1px solid var(--border); margin-bottom: 25px; flex-shrink: 0;">
+                
+                <div style="display: flex; align-items: center;">
+                    <button onclick="closeInfo()" style="font-size: 1.6rem; padding: 0 15px 0 0; color: var(--text-main); line-height: 1;">←</button>
+                    <div style="font-family: var(--font-brand); font-size: 1.4rem; font-weight: 800; letter-spacing: -1px; color: var(--text-main);">
+                        UNSAID
+                    </div>
                 </div>
+
+                <button onclick="toggleTheme()" id="theme-btn" style="
+                    border: 1px solid var(--border); 
+                    border-radius: 20px; 
+                    padding: 6px 12px; 
+                    font-size: 0.8rem; 
+                    font-weight: 600; 
+                    color: var(--text-main); 
+                    background: var(--surface);">
+                    ☀ LIGHT
+                </button>
+
             </div>
 
             <div style="flex: 1; overflow-y: auto; padding-right: 5px; padding-bottom: 50px;">
                 
-                <div style="color: #bbbbbb; font-size: 0.95rem; line-height: 1.6;">
+                <div style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
                     <p style="margin-bottom: 15px;">UNSAID exists for what is rarely allowed to exist elsewhere.</p>
                     <p style="margin-bottom: 15px;">Most digital spaces require identity, continuity, and visibility. They record, rank, and remember. Over time, expression becomes performance, and silence becomes safer than honesty.</p>
                     <p style="margin-bottom: 15px;">UNSAID is built on a different assumption.</p>
@@ -319,187 +431,312 @@
                     </p>
                 </div>
 
-                <div style="border-top: 1px solid #333; padding-top: 25px; margin-bottom: 30px;">
-                    <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: 600;">More Information</div>
+                <div style="border-top: 1px solid var(--border); padding-top: 25px; margin-bottom: 30px;">
+                    <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: 600;">More Information</div>
                     
-                   <div class="info-menu-item" onclick="window.location.href='about.html'">
-    <span>More About UNSAID</span> <span class="info-arrow">›</span>
-</div>
+                    <div class="info-menu-item" onclick="window.location.href='about.html'">
+                        <span>More About UNSAID</span> <span class="info-arrow">›</span>
+                    </div>
 
-<div class="info-menu-item" onclick="window.location.href='privacy.html'">
-    <span>Privacy Policy</span> <span class="info-arrow">›</span>
-</div>
+                    <div class="info-menu-item" onclick="window.location.href='privacy.html'">
+                        <span>Privacy Policy</span> <span class="info-arrow">›</span>
+                    </div>
 
-<div class="info-menu-item" onclick="window.location.href='terms.html'">
-    <span>Terms of Service</span> <span class="info-arrow">›</span>
-</div>
+                    <div class="info-menu-item" onclick="window.location.href='terms.html'">
+                        <span>Terms of Service</span> <span class="info-arrow">›</span>
+                    </div>
 
-<div class="info-menu-item" onclick="window.location.href='developer.html'">
-    <span>Developer Contact</span> <span class="info-arrow">›</span>
-</div>
+                    <div class="info-menu-item" onclick="window.location.href='developer.html'">
+                        <span>Developer Contact</span> <span class="info-arrow">›</span>
+                    </div>
                 </div>
 
-                <button onclick="closeInfo()" style="width:100%; padding:18px; background:#111; color:var(--text-main); border-radius:8px; border: 1px solid #333; font-weight: 600; margin-bottom: 50px;">
+                <button onclick="closeInfo()" style="width:100%; padding:18px; background:var(--surface); color:var(--text-main); border-radius:8px; border: 1px solid var(--border); font-weight: 600; margin-bottom: 50px;">
                     Back to Home
                 </button>
             </div>
         </div>
     </div>
+    <div id="report-modal"> ```
 
-    <div id="report-modal">
+
+    </script> </body>
+</html>
         <div style="text-align:center; color:#666; margin-bottom:15px; font-size:0.9rem;">REPORT MESSAGE</div>
         <div class="report-opt" onclick="submitReport()">Spam / Bot</div>
         <div class="report-opt" onclick="submitReport()">Abusive Content</div>
         <div style="padding:15px; text-align:center; color:white; margin-top:10px;" onclick="closeReport()">Cancel</div>
     </div>
 
-    <script>
-        // CONFIGURATION
+  <script>
+        // === CONFIGURATION ===
         const SUPABASE_URL = 'https://fzqadrwoceetmmckfjhs.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6cWFkcndvY2VldG1tY2tmamhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0NjEwNDIsImV4cCI6MjA4MjAzNzA0Mn0.pMYMEF9jyfJ4CXD7E9XmLj8QSAWJI5-h5iq4S7tU6HI';
-        const { createClient } = supabase;
-        const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        let db;
+        try {
+            const { createClient } = supabase;
+            db = createClient(SUPABASE_URL, SUPABASE_KEY);
+        } catch (e) { console.error("Supabase init failed:", e); }
 
-        // APP STATE
+        // === APP STATE ===
         let currentSpace = null;
+        let currentThreadRoot = null;
         let replyTarget = null;
+        
         let feedCache = [];
         let spacesCache = [];
-        let currentThreadRoot = null;
-        let selectedExpiryDays = 3;
         let mySessionAlias = null;
+        let selectedExpiryDays = 3;
 
-        // INTERACTION VARS
-        let touchStartX = 0;
-        let touchStartY = 0;
+        // Interaction Vars
+        let touchStartX = 0; 
+        let touchStartY = 0; 
         let swipedElement = null;
 
-        // INITIALIZATION
+        // === INITIALIZATION ===
         window.onload = function() { 
             initSessionAlias();
+            initHistoryState(); // Fix Back Button Logic
             loadSpacesList(); 
             initRealtime(); 
+            injectDynamicStyles();
         };
 
-        // --- IDENTITY SYSTEM (Session Based) ---
+        function injectDynamicStyles() {
+            const style = document.createElement('style');
+            style.innerHTML = `
+                .brand-title {
+                    font-size: 1.8rem !important; font-weight: 900 !important;
+                    background: linear-gradient(to right, #58A6FF, #9b59b6, #00f3ff, #e0e0e0, #58A6FF);
+                    background-size: 300% auto;
+                    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+                    animation: shine 8s linear infinite;
+                }
+                @keyframes shine { 0% { background-position: 0% center; } 100% { background-position: 300% center; } }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // === IDENTITY & COLOR ===
         function initSessionAlias() {
             let existing = sessionStorage.getItem('unsaid_session_alias');
             if (!existing) {
-                const adj = [
-                    'Silent','Hazy','Cyber','Lost','Neon','Solar','Lunar','Hollow','Electric',
-                    'Static','Glitch','Rapid','Zero','Dark','Bright','Faint','Prime','Echo',
-                    'Hidden','Secret','Vivid','Rapid','Blue','Red','Gold','Iron','Steel'
-                ];
-                const noun = [
-                    'Ghost','Signal','Echo','Drifter','Pilot','Shadow','Glitch','Node',
-                    'Spark','Voyager','Orbit','Pulse','Wave','Dust','Phantom','Runner',
-                    'System','Core','Link','Byte','Pixel','Cipher','Code','Key','Lock'
-                ];
-                const randomAdj = adj[Math.floor(Math.random() * adj.length)];
-                const randomNoun = noun[Math.floor(Math.random() * noun.length)];
-                const randomNum = Math.floor(1000 + Math.random() * 9000);
-                existing = `${randomAdj}-${randomNoun}-${randomNum}`;
+                const adj = ['Silent','Hazy','Cyber','Neon','Solar','Lunar','Electric','Static','Glitch','Zero','Dark','Prime','Echo','Secret','Vivid','Iron'];
+                const noun = ['Ghost','Signal','Echo','Pilot','Shadow','Node','Spark','Orbit','Pulse','Wave','Phantom','System','Core','Byte','Cipher','Key'];
+                existing = `${adj[Math.floor(Math.random()*adj.length)]}-${noun[Math.floor(Math.random()*noun.length)]}-${Math.floor(1000+Math.random()*9000)}`;
                 sessionStorage.setItem('unsaid_session_alias', existing);
             }
             mySessionAlias = existing;
-            console.log("User Identity:", mySessionAlias);
         }
 
-// --- NAVIGATION CONTROLLER ---
+        function getUserColor(username) {
+            if (!username) return '#777';
+            let hash = 0;
+            for (let i = 0; i < username.length; i++) hash = username.charCodeAt(i) + ((hash << 5) - hash);
+            return `hsl(${Math.abs(hash % 360)}, 80%, 70%)`;
+        }
+
+        // === NAVIGATION & HISTORY (Fixed) ===
+        function initHistoryState() {
+            if (!history.state || history.state.view !== 'spaces') {
+                history.replaceState({ view: 'spaces' }, '', '#home');
+            }
+        }
+
+        window.onpopstate = function(event) {
+            const state = event.state;
+            if (!state || state.view === 'spaces') goHomeInternal();
+            else if (state.view === 'chat') enterSpaceInternal(state.space);
+            else if (state.view === 'create') showView('view-create');
+            else if (state.view === 'info') showView('view-info');
+        };
+
         function showView(id) {
             ['view-spaces', 'view-chat', 'view-create', 'view-info'].forEach(v => document.getElementById(v).classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
         }
 
         function enterSpace(name) {
+            history.pushState({ view: 'chat', space: name }, '', '#chat');
+            enterSpaceInternal(name);
+        }
+
+        function enterSpaceInternal(name) {
             currentSpace = name;
-            
-            // CRITICAL FIX: Reset state manually WITHOUT rendering old data
-            // We do not use exitThread() here because it triggers a render of the *old* cache.
             currentThreadRoot = null;
-            feedCache = []; // Clear memory immediately
-            document.getElementById('thread-header-bar').classList.add('hidden');
             
-            // Set Loading UI
-            document.getElementById('feed').innerHTML = '<div style="padding:40px; text-align:center; color:#333;">Connecting...</div>';
+            // ALWAYS clear cache when switching to ensure no "Ghost Messages"
+            feedCache = []; 
+            document.getElementById('feed').innerHTML = '';
+
+            document.getElementById('thread-header-bar').classList.add('hidden');
             document.getElementById('chat-title').innerText = name ? `#${name}` : 'Public Space';
             
             showView('view-chat');
+            
+            // Show loading indicator
+            document.getElementById('feed').innerHTML = '<div style="padding:40px; text-align:center; color:#333;">Connecting Signal...</div>';
             loadMessages();
         }
 
-        function goHome() { 
-            currentSpace = null; 
-            // Here we can safely use exitThread because we are leaving the chat view anyway
+        function goHome() { history.back(); }
+        function goHomeInternal() {
+            currentSpace = null;
             currentThreadRoot = null;
-            document.getElementById('thread-header-bar').classList.add('hidden');
-            
-            showView('view-spaces'); 
-            loadSpacesList();
             document.getElementById('space-search').value = '';
+            showView('view-spaces');
+            loadSpacesList(); // Refresh rankings
         }
 
-        function openCreate() { showView('view-create'); }
-        function closeCreate() { goHome(); }
-        function openInfo() { showView('view-info'); }
-        function closeInfo() { showView('view-spaces'); }
-        // --- SPACES & SEARCH ---
+        function openCreate() { history.pushState({view:'create'},'','#create'); showView('view-create'); }
+        function closeCreate() { history.back(); }
+        function openInfo() { history.pushState({view:'info'},'','#info'); showView('view-info'); }
+        function closeInfo() { history.back(); }
+
+
+        // === DATA ENGINE: SPACES (Ranked & Clean Descriptions) ===
         async function loadSpacesList() {
+            // Fetch MORE history (1000) to find topics and spaces accurately
             const { data } = await db.from('posts')
-                .select('space_name')
+                .select('space_name, content, created_at, thread_id')
                 .neq('space_name', null)
                 .order('created_at', {ascending:false})
-                .limit(200);
+                .limit(1000); 
 
             if(!data) return;
-            const counts = {};
-            data.forEach(p => counts[p.space_name] = (counts[p.space_name]||0)+1);
-            spacesCache = Object.keys(counts).map(name => ({ name, count: counts[name] }));
+            
+            const spaces = {};
+
+            data.forEach(p => {
+                if (!spaces[p.space_name]) {
+                    spaces[p.space_name] = { 
+                        count: 0, 
+                        description: null, // Start null to find best candidate
+                        desc_time: null,
+                        last_active: p.created_at 
+                    };
+                }
+                spaces[p.space_name].count++;
+                
+                // INTELLIGENT DESCRIPTION LOGIC:
+                // 1. Prefer Root Messages (thread_id is null) - These are usually Topics.
+                // 2. If we already have a Root Message, ignore replies.
+                // 3. If we don't have a Root Message yet, take the oldest available message.
+                
+                const currentDesc = spaces[p.space_name].description;
+                const isRoot = p.thread_id === null;
+
+                if (!currentDesc) {
+                    // No description yet? Take this one temporarily.
+                    spaces[p.space_name].description = p.content;
+                    spaces[p.space_name].desc_time = p.created_at;
+                } else {
+                    // We have a description. Should we replace it?
+                    // If the current one is NOT a root, and this one IS a root -> Replace it.
+                    // If both are/aren't roots, take the older one.
+                    const currentIsRoot = false; // We can't track this easily without complex obj, simplified:
+                    
+                    if (isRoot && new Date(p.created_at) < new Date(spaces[p.space_name].desc_time)) {
+                         // Found an older root message, this is likely the topic
+                         spaces[p.space_name].description = p.content;
+                         spaces[p.space_name].desc_time = p.created_at;
+                    }
+                }
+            });
+
+            spacesCache = Object.keys(spaces).map(name => ({ 
+                name, 
+                count: spaces[name].count,
+                desc: spaces[name].description,
+                last_active: spaces[name].last_active
+            }));
+
+            // RANKING: 1. Most Recent Activity, 2. Volume
+            spacesCache.sort((a, b) => {
+                const timeDiff = new Date(b.last_active) - new Date(a.last_active);
+                if (Math.abs(timeDiff) > 1000) return timeDiff; 
+                return b.count - a.count;
+            });
+            
             renderSpacesList(spacesCache);
         }
 
         function renderSpacesList(list) {
-            const html = list.map(item => `
+            const html = list.map(item => {
+                let desc = item.desc || "Active Signal";
+                if (desc.length > 55) desc = desc.substring(0, 55) + "...";
+                
+                return `
                 <div class="space-row" onclick="enterSpace('${item.name}')">
-                    <div>
-                        <div class="space-main">#${item.name}</div>
-                        <div class="space-sub">Community Space</div>
+                    <div style="width: 100%;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div class="space-main">#${item.name}</div>
+                            <div style="font-size:0.75rem; color:var(--text-muted); background:rgba(120,120,120,0.1); padding:2px 6px; border-radius:4px;">${item.count}</div>
+                        </div>
+                        <div class="space-sub" style="color:var(--text-muted); font-style:italic; margin-top:4px; opacity:0.8;">"${escapeHtml(desc)}"</div>
                     </div>
-                </div>`).join('');
-            document.getElementById('community-spaces-anchor').innerHTML = html || '<div style="padding:20px; color:#444; text-align:center">No matches found</div>';
+                </div>`;
+            }).join('');
+            document.getElementById('community-spaces-anchor').innerHTML = html || '<div style="padding:40px; color:#555; text-align:center">No active signals found.</div>';
         }
 
         function filterSpaces() {
             const query = document.getElementById('space-search').value.toLowerCase();
-            renderSpacesList(spacesCache.filter(s => s.name.includes(query)));
+            renderSpacesList(spacesCache.filter(s => s.name.includes(query) || s.desc.toLowerCase().includes(query)));
         }
 
-        function commitCreate() {
-            const val = document.getElementById('new-space-name').value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-            if(val) enterSpace(val);
+        async function commitCreate() {
+            const nameInput = document.getElementById('new-space-name');
+            const topicInput = document.getElementById('new-space-topic');
+            const spaceVal = nameInput.value.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+            const topicVal = topicInput.value.trim();
+
+            if (!spaceVal) { alert("Space name is required."); return; }
+            if (!topicVal) { alert("Please provide a topic."); return; }
+
+            enterSpace(spaceVal);
+            closeCreate();
+
+            const expiry = new Date(); expiry.setDate(expiry.getDate() + 7);
+            const payload = {
+                content: topicVal, space_name: spaceVal, expiry_time: expiry.toISOString(),
+                thread_id: null, author_alias: mySessionAlias || 'System'
+            };
+            await db.from('posts').insert(payload);
+            nameInput.value = ''; topicInput.value = '';
         }
 
-        // --- MESSAGING ENGINE ---
+        // === DATA ENGINE: MESSAGES (Fixed Loading & Caching) ===
         async function loadMessages() {
-            let query = db.from('posts').select('*').eq('status', 'active').order('created_at', {ascending:true}).limit(100);
+            // FIX: Fetch NEWEST messages first (descending), so we see recent chat
+            let query = db.from('posts').select('*').eq('status', 'active')
+                          .order('created_at', {ascending:false}) // Get Newest
+                          .limit(75); // Grab last 75 messages
+
             if(currentSpace) query = query.eq('space_name', currentSpace);
             else query = query.is('space_name', null);
             
             const { data } = await query;
             if(data) {
-                feedCache = data;
+                // Reverse them so they display Old -> New (Top -> Bottom)
+                feedCache = data.reverse(); 
                 renderCurrentContext();
             }
         }
 
         function initRealtime() {
             db.channel('public:posts').on('postgres_changes', {event:'INSERT', schema:'public', table:'posts'}, payload => {
-                // Deduplication check
                 if (feedCache.find(p => p.id === payload.new.id)) return;
                 
-                feedCache.push(payload.new);
-                const isRelevantSpace = (payload.new.space_name === currentSpace) || (!currentSpace && !payload.new.space_name);
-                if(isRelevantSpace) renderCurrentContext();
+                // Strict Space Filter to prevent leaks
+                const msgSpace = payload.new.space_name;
+                const isRelevant = (msgSpace === currentSpace) || (!currentSpace && !msgSpace);
+                
+                if(isRelevant) {
+                    feedCache.push(payload.new);
+                    renderCurrentContext();
+                }
             }).subscribe();
         }
 
@@ -508,37 +745,33 @@
             else renderFeed(feedCache);
         }
 
-        // --- THREAD SYSTEM (Recursive) ---
+        // === THREADS & RENDERING ===
         function viewThread(startId) {
             let root = feedCache.find(p => p.id === startId);
             if(!root) return;
-            
-            // Climb up to true root
+            // Find root parent
             let parent = root;
             while(parent && parent.thread_id) {
                 const found = feedCache.find(p => p.id === parent.thread_id);
-                if(found) parent = found;
-                else break;
+                if(found) parent = found; else break;
             }
             root = parent;
             currentThreadRoot = root.id;
 
-            // Gather all descendants
+            // Collect tree
             const treeIds = new Set([root.id]);
             let added = true;
             while(added) {
                 added = false;
                 feedCache.forEach(p => {
                     if(p.thread_id && treeIds.has(p.thread_id) && !treeIds.has(p.id)) {
-                        treeIds.add(p.id);
-                        added = true;
+                        treeIds.add(p.id); added = true;
                     }
                 });
             }
-
             const threadPosts = feedCache.filter(p => treeIds.has(p.id));
             threadPosts.sort((a,b) => new Date(a.created_at) - new Date(b.created_at));
-
+            
             document.getElementById('thread-header-bar').classList.remove('hidden');
             renderFeed(threadPosts, true);
         }
@@ -557,14 +790,14 @@
                 const el = document.createElement('div');
                 el.className = 'msg-container';
                 if(post.author_alias === mySessionAlias) el.classList.add('own-message');
-
-                // Gesture Binding
+                
                 el.ontouchstart = (e) => handleSwipeStart(e, el);
                 el.ontouchmove = (e) => handleSwipeMove(e, el);
                 el.ontouchend = (e) => handleSwipeEnd(e, el, post.id, post.content);
 
                 const displayAlias = post.author_alias || 'anonymous';
                 const time = new Date(post.created_at).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+                const nameColor = getUserColor(displayAlias);
 
                 let replyCtx = '';
                 if(post.thread_id) {
@@ -576,7 +809,7 @@
 
                 el.innerHTML = `
                     <div class="msg-header">
-                        <div class="msg-alias">${displayAlias}</div>
+                        <div class="msg-alias" style="color: ${nameColor}">${displayAlias}</div>
                         <div class="msg-time">${time}</div>
                     </div>
                     ${replyCtx}
@@ -592,44 +825,7 @@
             if(!isThreadView) feed.scrollTop = feed.scrollHeight;
         }
 
-        // --- GESTURE LOGIC (Swipe to Reply) ---
-        function handleSwipeStart(e, el) {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            swipedElement = el;
-            el.style.transition = 'none';
-        }
-
-        function handleSwipeMove(e, el) {
-            if(!swipedElement) return;
-            const currentX = e.touches[0].clientX;
-            const diffX = currentX - touchStartX;
-            const diffY = e.touches[0].clientY - touchStartY;
-
-            // Only horizontal swipe allowed
-            if(diffX > 5 && Math.abs(diffY) < 30) {
-                if(e.cancelable) e.preventDefault(); // Stop scroll
-                const moveAmount = Math.min(diffX, 70);
-                el.style.transform = `translateX(${moveAmount}px)`;
-            }
-        }
-
-        function handleSwipeEnd(e, el, id, content) {
-            if(!swipedElement) return;
-            const diffX = e.changedTouches[0].clientX - touchStartX;
-            
-            // Spring animation
-            el.style.transition = 'transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1)';
-            el.style.transform = 'translateX(0)';
-            
-            if(diffX > 50 && Math.abs(e.changedTouches[0].clientY - touchStartY) < 30) {
-                if(navigator.vibrate) navigator.vibrate(10);
-                initReply(id, escapeHtml(content));
-            }
-            swipedElement = null;
-        }
-
-// --- COMPOSER LOGIC ---
+        // === COMPOSER & ACTIONS ===
         function setExpiry(days) {
             selectedExpiryDays = days;
             document.querySelectorAll('.expiry-pill').forEach(p => p.classList.remove('active'));
@@ -653,54 +849,63 @@
             const text = input.value.trim();
             if(!text) return;
 
-            const expiry = new Date();
-            expiry.setDate(expiry.getDate() + selectedExpiryDays);
-
-            // LOGIC FIX: DETERMINE PARENT ID
-            // 1. Is user replying to a specific message? Use that ID.
-            // 2. Is user just looking at a thread? Use the Thread Root ID.
-            // 3. Otherwise, it is a new main feed post (null).
-            let finalThreadId = null;
+            const expiry = new Date(); expiry.setDate(expiry.getDate() + selectedExpiryDays);
             
-            if (replyTarget) {
-                finalThreadId = replyTarget.id;
-            } else if (currentThreadRoot) {
-                finalThreadId = currentThreadRoot;
-            }
+            let finalThreadId = null;
+            if (replyTarget) finalThreadId = replyTarget.id;
+            else if (currentThreadRoot) finalThreadId = currentThreadRoot;
 
             const payload = {
                 content: text,
                 space_name: currentSpace,
                 expiry_time: expiry.toISOString(),
                 thread_id: finalThreadId,
-                author_alias: mySessionAlias || 'Anonymous-User'
+                author_alias: mySessionAlias || 'Anonymous'
             };
 
-            // Optimistic UI Update
-            input.value = '';
-            cancelReply();
+            input.value = ''; cancelReply();
 
-            const { data, error } = await db.from('posts').insert(payload).select();
-
-            if(error) {
-                console.error(error);
-                alert("Failed to send. Please check connection.");
-            } else {
-                if(data && data[0]) {
-                    // Only add to feed manually if we haven't received it via Realtime yet
-                    if (!feedCache.find(p => p.id === data[0].id)) {
-                        feedCache.push(data[0]);
-                        renderCurrentContext();
-                    }
-                }
+            const { data } = await db.from('posts').insert(payload).select();
+            if(data && data[0] && !feedCache.find(p => p.id === data[0].id)) {
+                feedCache.push(data[0]);
+                renderCurrentContext();
             }
         }
 
-        // UTILITIES
+       // === GESTURES & UTILS ===
+        function handleSwipeStart(e, el) { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; swipedElement = el; el.style.transition = 'none'; }
+        function handleSwipeMove(e, el) {
+            if(!swipedElement) return;
+            const diffX = e.touches[0].clientX - touchStartX;
+            if(diffX > 5 && Math.abs(e.touches[0].clientY - touchStartY) < 30) {
+                if(e.cancelable) e.preventDefault();
+                el.style.transform = `translateX(${Math.min(diffX, 70)}px)`;
+            }
+        }
+        function handleSwipeEnd(e, el, id, content) {
+            if(!swipedElement) return;
+            el.style.transition = 'transform 0.2s cubic-bezier(0.2,0.8,0.2,1)';
+            el.style.transform = 'translateX(0)';
+            if(e.changedTouches[0].clientX - touchStartX > 50) initReply(id, escapeHtml(content));
+            swipedElement = null;
+        }
+
         function escapeHtml(t) { return t ? t.replace(/&/g,"&amp;").replace(/</g,"&lt;") : ""; }
         function openReport() { document.getElementById('report-modal').classList.add('active'); }
         function closeReport() { document.getElementById('report-modal').classList.remove('active'); }
         function submitReport() { alert("Report submitted."); closeReport(); }
+        
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.getElementById('theme-btn');
+            const isLight = html.getAttribute('data-theme') === 'light';
+            if (isLight) { html.removeAttribute('data-theme'); if(btn) btn.innerText = '☀ LIGHT'; localStorage.setItem('unsaid_theme', 'dark'); }
+            else { html.setAttribute('data-theme', 'light'); if(btn) btn.innerText = '☾ DARK'; localStorage.setItem('unsaid_theme', 'light'); }
+        }
+        if (localStorage.getItem('unsaid_theme') === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            setTimeout(() => { const btn = document.getElementById('theme-btn'); if(btn) btn.innerText = '☾ DARK'; }, 100);
+        }
     </script>
 </body>
 </html>
